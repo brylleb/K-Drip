@@ -1,0 +1,275 @@
+/* Main Body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+    background-color: #f0f0f0;
+    background: url('glutathione-drip-background.jpg') no-repeat center center/cover;
+}
+
+/* Main container (Flexbox layout) */
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 10px;
+    background-color: #e5b7b7;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 100px;
+    flex-wrap: nowrap; /* Prevent wrapping, keeping sidebar and content side by side */
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 1;
+    min-width: 280px;
+    background-color: #e5b7b7;
+    padding: 20px;
+    border-right: 30px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 50px; /* Added margin-right to create white space */
+    border-radius: 100px;
+}
+
+/* Profile Picture Container */
+.profile-pic-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center;     /* Centers vertically */
+    margin-bottom: 20px;
+    background-color: #e5b7b7;
+    border-radius: 100px;
+    padding: 10px;
+}
+
+/* Profile Picture */
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+/* User Info */
+.user-info-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.user-info h4 {
+    margin: 10px 0;
+    color: #333;
+}
+
+/* Logout Button */
+.logout-button a {
+    text-decoration: none;
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+}
+
+.logout-button a:hover {
+    background-color: #ff1a1a;
+}
+
+/* Content Section */
+.content-section {
+    flex: 3;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-left: 20px; /* Added margin-left to create white space */
+}
+
+/* Heading */
+.content-section h1 {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Individual Tab Styling */
+.tab {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+/* Active Tab Styling */
+.tab.active {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+/* Tab Hover Effect */
+.tab:hover {
+    background-color: #c8a2a2;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Appointment Form */
+.form-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #9c8888;
+    color: white;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #785d1c;
+}
+
+/* Session History Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+.pagination {
+    text-align: center;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #f2f2f2;
+    text-decoration: none;
+    border: 1px solid #ddd;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+        gap: 0; /* Remove gap on small screens */
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+        border-right: none;
+        margin-bottom: 20px;
+    }
+
+    .content-section {
+        width: 100%;
+    }
+
+    .tabs {
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .tab {
+        width: 100%;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        background-color: #ddd;
+    }
+
+    .form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+    }
+
+    .logout-button a {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .content-section h1 {
+        font-size: 1.5em;
+    }
+
+    .form-container input, .form-container select, .form-container button {
+        font-size: 0.9em;
+    }
+
+    table th, table td {
+        font-size: 0.8em;
+    }
+}

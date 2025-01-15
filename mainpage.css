@@ -1,0 +1,187 @@
+/* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background: url('glutathione-drip-background.jpg') no-repeat center center/cover;
+    color: #004d40;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Banner Styles */
+.banner {
+    width: 100%;
+    background: #a2884bcd;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.banner a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0 15px;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.banner a:hover {
+    color: #b2dfdb;
+}
+
+.banner .right {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #a2884bd2;
+    text-align: center;
+    color: #f0f4f4;
+    min-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: #ffffff;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    font-size: 1em;
+}
+
+.dropdown-content a:hover {
+    background-color: #e0f2f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Banner Responsiveness */
+@media (max-width: 768px) {
+    .banner a {
+        font-size: 1em;
+        margin: 0 10px;
+    }
+
+    .banner {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .banner .right {
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner {
+        padding: 8px;
+    }
+
+    .banner a {
+        font-size: 0.9em;
+        margin: 0 8px;
+    }
+}
+
+/* Container Styles */
+.container {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.676);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 100%;  /* Make the container full width */
+    max-width: 600px;  /* Set a max-width to prevent it from stretching too wide */
+    margin: 40px auto;  /* Add top and bottom margin, center it horizontally */
+    box-sizing: border-box;  /* Ensure padding is included in the element's width/height */
+}
+
+/* Container Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;  /* Reduce padding on smaller screens */
+        width: 90%;  /* Make the container take up more space */
+        max-width: 90%;  /* Allow the container to scale better */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;  /* Further reduce padding for very small screens */
+        width: 95%;  /* Make the container nearly full width on mobile */
+        max-width: 95%;  /* Allow the container to take more space */
+    }
+}
+
+/* Container Title */
+.container h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #a2884b;
+}
+
+/* Button Styles */
+.button {
+    display: inline-block;
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    color: white;
+    background: #a2884b;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* Button Hover Effect */
+.button:hover {
+    background: #00796b;
+}
+
+/* Button Responsiveness */
+@media (max-width: 768px) {
+    .button {
+        font-size: 1em;  /* Adjust font size on smaller screens */
+        padding: 12px 25px;  /* Adjust padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .button {
+        font-size: 0.9em;  /* Smaller font size on very small screens */
+        padding: 10px 20px;  /* Smaller padding */
+    }
+}

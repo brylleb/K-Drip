@@ -1,0 +1,120 @@
+/* General form styling */
+.form-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust minimum column width for better mobile fit */
+    gap: 10px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;  /* Add padding for mobile devices */
+}
+
+/* Label styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Ensures labels are aligned to the top */
+    margin: 5px 0;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+/* Input field styling */
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="date"], input[type="number"] {
+    padding: 12px;
+    font-size: 16px;  /* Adjust font size for better readability */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;  /* Ensure padding doesn't affect width */
+    margin-bottom: 10px;  /* Add margin between fields */
+}
+
+input[type="submit"] {
+    background-color: #9c8888;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Button styling */
+button {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #9c8888;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;  /* Ensure text is centered */
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Centering the submit and cancel buttons */
+.form-actions {
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;  /* Centers the buttons horizontally */
+    margin-top: 10px;
+    gap: 10px;  /* Adds space between buttons */
+}
+
+/* Responsive styling for mobile devices */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 15px;  /* Reduce padding on smaller screens */
+    }
+
+    .form-group {
+        margin: 10px 0;
+    }
+
+    input[type="submit"], .button {
+        width: 100%;  /* Make the buttons full-width on smaller screens */
+    }
+
+    .form-actions {
+        grid-column: span 1; /* Allow buttons to take full width in small screens */
+        flex-direction: column;  /* Stack buttons vertically */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Adjust input field size and font for small screens */
+    input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="date"], input[type="number"] {
+        font-size: 14px;  /* Smaller font for very small screens */
+    }
+
+    .form-container {
+        padding: 10px;  /* Further reduce padding on very small screens */
+    }
+
+    label {
+        font-size: 13px;  /* Reduce label font size on smaller screens */
+    }
+
+    .button {
+        font-size: 14px;  /* Adjust button font size */
+        padding: 12px 20px;  /* Reduce padding for very small screens */
+    }
+}
