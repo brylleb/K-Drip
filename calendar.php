@@ -6,6 +6,7 @@
     <title>Calendar</title>
     <link rel="stylesheet" href="mainpage.css">
     <link rel="stylesheet" href="calendar.css">
+    <link rel="stylesheet" href="time.css">
 </head>
 <body>
     <div class="container">
