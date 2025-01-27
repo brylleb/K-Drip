@@ -131,15 +131,14 @@
             echo "</div>"; // Close tab content div
         }
         ?>
+        <a href="backoffice.php" class="button">Back</a>
+    </div>
 
-        <!-- Time Container Section -->
+            <!-- Time Container Section -->
         <div class="time-container">
             <h2>Time Container</h2>
             <p>This is where you can add time-related data or other information.</p>
         </div>
-
-        <a href="backoffice.php" class="button">Back</a>
-    </div>
 
     <script>
         // JavaScript to handle tab switching
