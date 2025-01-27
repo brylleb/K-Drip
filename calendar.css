@@ -3,19 +3,38 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overflow-y: auto; /* Prevent horizontal scrolling */
 }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    background-color: #e5b7b7;
-    max-height: 80vh; /* Limit height for scrolling */
-    overflow-y: auto; /* Allow vertical scrolling */
+.calendarcontainer {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: #e5a1a1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    width: 90%;  /* Make the container full width */
+    box-sizing: border-box;  /* Ensure padding is included in the element's width/height */
+    overflow-x: auto; /* Enable horizontal scrolling if necessary */
+    max-width: 100%; /* Ensure container width doesn't exceed the screen width */
+}
+
+/* Container Responsiveness */
+@media (max-width: 768px) {
+    .calendarcontainer {
+        padding: 25px;  /* Reduce padding on smaller screens */
+        width: 90%;  /* Make the container take up more space */
+        max-width: 90%;  /* Allow the container to scale better */
+    }
+}
+
+@media (max-width: 480px) {
+    .calendarcontainer {
+        padding: 25px;  /* Further reduce padding for very small screens */
+        width: 95%;  /* Make the container nearly full width on mobile */
+        max-width: 95%;  /* Allow the container to take more space */
+    }
 }
 
 h1 {
@@ -31,7 +50,7 @@ h1 {
     gap: 10px;
     margin-bottom: 20px;
     overflow-x: auto; /* Allow horizontal scrolling */
-    padding: 0 10px; /* Add padding for some space */
+    padding: 10px; /* Add padding for some space */
 }
 
 .tab {
@@ -45,6 +64,7 @@ h1 {
     text-align: center;
     flex-shrink: 0; /* Prevent shrinking */
     min-width: 100px; /* Set a minimum width for tabs */
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
 .tab.active {
@@ -61,10 +81,13 @@ h1 {
 
 .calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, 1fr); /* Always 7 columns for days */
     gap: 5px;
     text-align: center;
     font-size: 1rem;
+    grid-auto-rows: minmax(50px, auto); /* Allow rows to expand based on content */
+    overflow-x: auto; /* Allow horizontal scrolling if necessary */
+    width: 100%; /* Ensure the calendar does not overflow */
 }
 
 .day {
@@ -72,6 +95,14 @@ h1 {
     border: 1px solid #ddd;
     background-color: #f9f9f9;
     border-radius: 4px;
+    min-width: 50px; /* Ensure days don't shrink too much */
+    max-width: 120px; /* Prevent days from growing too large */
+    flex: 1 1 auto; /* Allow flexibility to shrink or grow */
+    position: relative; /* For appointment absolute positioning */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: flex-start; /* Align content at the top */
+    overflow-y: hidden; /* Hide overflowing content */
 }
 
 .day.header {
@@ -85,12 +116,29 @@ h1 {
     color: #007bff;
     margin-top: 5px;
     font-weight: bold;
+    display: block;
+    position: relative; /* Prevent absolute positioning */
+    width: 100%; /* Ensure it spans full width of the day */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent overflow */
+    text-overflow: ellipsis; /* Truncate text with ellipsis if too long */
+    white-space: nowrap; /* Prevent text from wrapping */
 }
 
+.appointment.more {
+    font-size: 0.8rem;
+    color: #007bff;
+    margin-top: 5px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Container Responsiveness */
 @media (max-width: 1024px) {
     /* Adjustments for tablet and small desktop screens */
     .calendar {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(7, 1fr); /* Always keep 7 columns */
         gap: 10px;
         font-size: 1rem;
     }
@@ -106,6 +154,7 @@ h1 {
     }
 }
 
+/* Mobile and Small Tablet Screens */
 @media (max-width: 768px) {
     /* Adjustments for mobile and small tablet screens */
     .tabs {
@@ -120,7 +169,7 @@ h1 {
     }
 
     .calendar {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(7, 1fr); /* Ensure 7 columns for days */
         gap: 10px;
         font-size: 0.9rem;
     }
@@ -130,13 +179,13 @@ h1 {
     }
 }
 
+/* Very Small Screens (Phones in Portrait Mode) */
 @media (max-width: 480px) {
     /* Adjustments for very small screens like phones in portrait mode */
     h1 {
         font-size: 1.2rem;
     }
 
-    /* Ensure the calendar's months align horizontally */
     .tabs {
         flex-direction: row;
         justify-content: flex-start;
@@ -152,8 +201,10 @@ h1 {
     }
 
     .calendar {
-        grid-template-columns: repeat(7, 1fr); /* Keep the 7 columns for days */
+        grid-template-columns: repeat(7, 1fr); /* Always maintain 7 columns for days */
         font-size: 0.8rem;
+        overflow-x: auto; /* Allow horizontal scrolling */
+        width: 100%; /* Ensure the calendar doesn't overflow */
     }
 
     .day {
@@ -165,19 +216,19 @@ h1 {
         color: #007bff;
         margin-top: 5px;
         font-weight: bold;
-        max-height: 40px; /* Limit the height of appointments */
+        max-height: 100px; /* Limit the height of appointments */
         overflow-y: auto; /* Allow scrolling if necessary */
         text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
+        white-space: normal; /* Allow wrapping of text if it's long */
     }
 }
 
 @media (max-width: 320px) {
     /* Further adjustments for ultra-small screens */
     .calendar {
-        grid-template-columns: repeat(1, 1fr); /* Stack calendar days vertically */
+        grid-template-columns: repeat(7, 1fr); /* Keep the 7 columns for days */
         font-size: 0.7rem;
+        overflow-x: auto; /* Allow horizontal scrolling */
     }
 
     .tabs {

@@ -1,7 +1,7 @@
 /* Body Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin-bottom: 20%;
     padding: 0;
     display: flex;
     justify-content: center;
@@ -117,13 +117,13 @@ body {
 /* Container Styles */
 .container {
     text-align: center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.676);
+    padding: 10px;
+    background-color: #e5a1a1;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     width: 100%;  /* Make the container full width */
     max-width: 600px;  /* Set a max-width to prevent it from stretching too wide */
-    margin: 40px auto;  /* Add top and bottom margin, center it horizontally */
+    margin-top: 10px;
     box-sizing: border-box;  /* Ensure padding is included in the element's width/height */
 }
 

@@ -7,9 +7,33 @@
     <link rel="stylesheet" href="mainpage.css">
     <link rel="stylesheet" href="calendar.css">
     <link rel="stylesheet" href="time.css">
+    <style>
+.message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+    max-width: 90%; /* Responsive for smaller screens */
+    text-align: center;
+}
+
+
+        .message-box p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #333;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
+<body style="height: 100%">
+    <div class="container"> 
         <div class="banner">
             <a href="index.html">K-Drip</a>
             <div class="right">
@@ -36,42 +60,35 @@
                 </div>
             </div>
         </div>
-
+    </div>
+    <div class="calendarcontainer"> 
         <h1><?php echo date('Y'); ?> Calendar</h1>
 
-        <!-- Tabs for Months -->
         <div class="tabs">
             <?php
-            $months = [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
-            ];
+            $months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             foreach ($months as $index => $month) {
                 echo "<button class='tab" . ($index === 0 ? " active" : "") . "' data-target='month-$index'>$month</button>";
             }
             ?>
         </div>
 
-        <!-- Tab Content for Each Month -->
         <?php
-        $servername = "sql205.infinityfree.com";
-        $username = "if0_38112458";
-        $password = "8YH7MFDryvDx8";
-        $dbname = "if0_38112458_kdrip_database";
+// Database connection settings
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database"; 
 
-        // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
 
-        // Check connection
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        // Set the current year
         $currentYear = date('Y');
 
-        // Fetch appointment data for the current year
-        $sql = "SELECT mp.date, rm.first_name 
+        $sql = "SELECT mp.date, rm.first_name, DATE_FORMAT(mp.time, '%h:%i %p') AS formatted_time
                 FROM member_profile mp 
                 JOIN reg_member rm ON mp.reg_member_id = rm.id
                 WHERE YEAR(mp.date) = ? 
@@ -81,83 +98,84 @@
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Create an array to store appointments by date
         $appointments = [];
         while ($row = $result->fetch_assoc()) {
-            $appointments[$row['date']][] = $row['first_name']; // Store multiple first names for the same date
+            $appointments[$row['date']][] = [
+                'first_name' => $row['first_name'], 
+                'time' => $row['formatted_time'] // Use formatted time here
+            ];
         }
 
-        // Close the connection
         $conn->close();
 
-        // Render the calendar for each month
         foreach ($months as $index => $month) {
             $firstDayOfMonth = strtotime("$month 1 $currentYear");
             $daysInMonth = date('t', $firstDayOfMonth);
-            $startDay = date('w', $firstDayOfMonth); // Day of the week (0 = Sunday, 6 = Saturday)
+            $startDay = date('w', $firstDayOfMonth); 
 
             echo "<div class='tab-content" . ($index === 0 ? " active" : "") . "' id='month-$index'>";
-
-            // Render the calendar
             echo "<div class='calendar'>";
 
-            // Days of the week header
             $daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             foreach ($daysOfWeek as $day) {
                 echo "<div class='day header'>$day</div>";
             }
 
-            // Empty cells before the first day
             for ($i = 0; $i < $startDay; $i++) {
                 echo "<div class='day'></div>";
             }
 
-            // Days of the month
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $currentDate = "$currentYear-" . str_pad($index + 1, 2, "0", STR_PAD_LEFT) . "-" . str_pad($day, 2, "0", STR_PAD_LEFT);
 
                 echo "<div class='day'>"; 
                 echo $day;
 
-                // Check if the current date exists in the $appointments array and display all first names for that date
                 if (isset($appointments[$currentDate])) {
-                    foreach ($appointments[$currentDate] as $firstName) {
-                        echo "<div class='appointment'>$firstName</div>";
+                    foreach ($appointments[$currentDate] as $appointment) {
+                        echo "<div class='appointment'>
+                                <span onclick='showMessage(event, \"{$appointment['first_name']}\", \"{$appointment['time']}\")'>{$appointment['first_name']}</span>
+                              </div>";
                     }
                 }
 
                 echo "</div>";
             }
 
-            echo "</div>"; // Close calendar div
-            echo "</div>"; // Close tab content div
+            echo "</div>"; 
+            echo "</div>"; 
         }
         ?>
         <a href="backoffice.php" class="button">Back</a>
     </div>
-
-    <!-- Time Container Section
-    <div class="timecontainer">
-        <h2>Time Container</h2>
-        <p>This is where you can add time-related data or other information.</p>
-    </div> -->
-
+    <div id="message-box" class="message-box"></div>
     <script>
-        // JavaScript to handle tab switching
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
+        const messageBox = document.getElementById('message-box');
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // Remove active class from all tabs and contents
                 tabs.forEach(t => t.classList.remove('active'));
                 tabContents.forEach(tc => tc.classList.remove('active'));
 
-                // Add active class to the clicked tab and its content
                 tab.classList.add('active');
                 document.getElementById(tab.getAttribute('data-target')).classList.add('active');
             });
         });
+
+        function showMessage(event, name, time) {
+    messageBox.innerHTML = `<p><strong>${name}</strong><br>Appointment Time: ${time}</p>`;
+    messageBox.style.display = 'block';
+}
+
+// Hide the message box when clicking outside
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('.appointment span') && !event.target.closest('.message-box')) {
+        messageBox.style.display = 'none';
+    }
+});
+
     </script>
 </body>
 </html>
