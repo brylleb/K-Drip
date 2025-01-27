@@ -2,10 +2,10 @@
 session_start();
 
 // Database connection settings
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "kdrip_database";
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

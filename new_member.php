@@ -61,7 +61,7 @@
                 <!-- Form Actions -->
                 <div class="form-actions">
                     <input type="submit" value="Submit" class="button">
-                    <a href="Homepage.html" class="button">Cancel</a>
+                    <a href="index.html" class="button">Cancel</a>
                 </div>
             </form>
         </div>

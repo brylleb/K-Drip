@@ -2,11 +2,10 @@
 session_start();
 
 // Database connection settings
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "kdrip_database";
-
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database";
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -185,32 +184,43 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'appointment-tab';
                 <h2>Drip/Push History</h2>
                 <p>View your previous Drip and Push sessions here.</p>
                 <div style="overflow-x: auto;">
-                    <table>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Price</th>
-                            <th>Service</th>
-                            <th>Note</th>
-                            <th>Mode of Payment</th>
-                            <th>Status</th>
-                        </tr>
-                        <?php
-                        // Display session history
-                        while ($row = $history_result->fetch_assoc()) {
-                            echo "<tr>
-                                    <td>" . htmlspecialchars($row['date']) . "</td>
-                                    <td>" . htmlspecialchars($row['time']) . "</td>
-                                    <td>" . htmlspecialchars($row['price']) . "</td>
-                                    <td>" . htmlspecialchars($row['service']) . "</td>
-                                    <td>" . htmlspecialchars($row['note']) . "</td>
-                                    <td>" . htmlspecialchars($row['mode_of_payment']) . "</td>
-                                    <td>" . htmlspecialchars($row['status']) . "</td>
-                                  </tr>";
-                        }
-                        ?>
-                    </table>
-                </div>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Price</th>
+            <th>Service</th>
+            <th>Note</th>
+            <th>Mode of Payment</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        <?php
+        // Display session history
+        while ($row = $history_result->fetch_assoc()) {
+            echo "<tr>
+                    <td>" . htmlspecialchars($row['date']) . "</td>
+                    <td>" . htmlspecialchars($row['time']) . "</td>
+                    <td>" . htmlspecialchars($row['price']) . "</td>
+                    <td>" . htmlspecialchars($row['service']) . "</td>
+                    <td>" . htmlspecialchars($row['note']) . "</td>
+                    <td>" . htmlspecialchars($row['mode_of_payment']) . "</td>
+                    <td>" . htmlspecialchars($row['status']) . "</td>
+                    <td class='action-buttons'>
+                        <form style='display:inline;' action='editsession.php' method='POST'>
+                            <input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>
+                            <button class='edit-btn' type='submit'>Edit</button>
+                        </form>
+                        <form style='display:inline;' action='deletesession.php' method='POST'>
+                            <input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>
+                            <button class='delete-btn' type='submit' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</button>
+                        </form>
+                    </td>
+                  </tr>";
+        }        
+        ?>
+    </table>
+</div>
 
                 <!-- Pagination -->
                 <div class="pagination">

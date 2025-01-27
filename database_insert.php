@@ -3,10 +3,10 @@
 $message = '';
 
 // Database connection settings
-$servername = "localhost"; // Default for XAMPP
-$username = "root";        // Default username for XAMPP
-$password = "";            // Default password for XAMPP
-$dbname = "kdrip_database";   // Replace with your database name
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";            // Default password for XAMPP
+$dbname = "if0_38112458_kdrip_database";
 
 // Create a database connection using MySQLi
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -158,7 +158,7 @@ $conn->close();
 
         // Redirect to another page after 5 seconds (optional auto-redirect)
         setTimeout(function () {
-            window.location.href = "Homepage.html"; // Replace with your desired URL
+            window.location.href = "index.html"; // Replace with your desired URL
         }, 5000);
     <?php endif; ?>
 
@@ -166,7 +166,7 @@ $conn->close();
     document.getElementById('closeModalBtn').onclick = function() {
         var modal = document.getElementById('messageModal');
         modal.style.display = "none";
-        window.location.href = "Homepage.html"; // Replace with your desired URL
+        window.location.href = "index.html"; // Replace with your desired URL
     }
 
     // Close the modal if the user clicks anywhere outside of it and redirect
@@ -174,7 +174,7 @@ $conn->close();
         var modal = document.getElementById('messageModal');
         if (event.target == modal) {
             modal.style.display = "none";
-            window.location.href = "Homepage.html"; // Replace with your desired URL
+            window.location.href = "index.html"; // Replace with your desired URL
         }
     }
 </script>

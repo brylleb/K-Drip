@@ -10,7 +10,7 @@
 <body>
     <div class="container">
     <div class="banner">
-        <a href="Homepage.html">K-Drip</a>
+        <a href="index.html">K-Drip</a>
         <div class="right">
             <div class="dropdown">
                 <a>Contact Us</a>
@@ -52,10 +52,10 @@
 
         <!-- Tab Content for Each Month -->
         <?php
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "kdrip_database";
+        $servername = "sql205.infinityfree.com";
+        $username = "if0_38112458";
+        $password = "8YH7MFDryvDx8";
+        $dbname = "if0_38112458_kdrip_database";
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
