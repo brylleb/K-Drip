@@ -1,0 +1,11 @@
+.timecontainer {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #e5b7b7;
+    max-height: 80vh; /* Limit height for scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
+}
