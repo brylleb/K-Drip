@@ -136,7 +136,7 @@
     </div>
 
             <!-- Time Container Section -->
-        <div class="time-container">
+        <div class="timecontainer">
             <h2>Time Container</h2>
             <p>This is where you can add time-related data or other information.</p>
         </div>
