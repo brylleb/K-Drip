@@ -19,4 +19,4 @@ jobs:
         server: 'ftp://ftpupload.net'
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: '/hotdocs'
+        server-dir: '/hotdocs/
