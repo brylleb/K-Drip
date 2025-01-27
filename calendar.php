@@ -7,35 +7,127 @@
     <link rel="stylesheet" href="mainpage.css">
     <link rel="stylesheet" href="calendar.css">
     <link rel="stylesheet" href="time.css">
+    <style>
+        /* Ensure the banner has proper padding and does not overlap with content */
+        .banner {
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+
+        /* Add margin below the banner */
+        .container {
+            margin-top: 50px;
+        }
+
+        /* Tab styles for months */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Container for the calendar */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        /* Days header (Sun, Mon, etc.) */
+        .day.header {
+            font-weight: bold;
+            text-align: center;
+            background-color: #ddd;
+            padding: 10px;
+        }
+
+        /* Each day cell style */
+        .day {
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Add spacing and styling for the Time Container */
+        .timecontainer {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+        }
+
+        .timecontainer h2 {
+            margin-top: 0;
+        }
+
+        /* Style for the Back button */
+        .button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-    <div class="banner">
-        <a href="index.html">K-Drip</a>
-        <div class="right">
-            <div class="dropdown">
-                <a>Contact Us</a>
-                <div class="dropdown-content">
-                    <p> Phone: +639065310391</p>
-                    <p> Email: K-Drip@gmail.com</p>
+        <div class="banner">
+            <a href="index.html">K-Drip</a>
+            <div class="right">
+                <div class="dropdown">
+                    <a>Contact Us</a>
+                    <div class="dropdown-content">
+                        <p> Phone: +639065310391</p>
+                        <p> Email: K-Drip@gmail.com</p>
+                    </div>
                 </div>
-            </div>
-            <div class="dropdown">
-                <a>Services</a>
-                <div class="dropdown-content">
-                    <a href="push.html">Gluta Push</a>
-                    <a href="drip.html">Gluta Drip</a>
+                <div class="dropdown">
+                    <a>Services</a>
+                    <div class="dropdown-content">
+                        <a href="push.html">Gluta Push</a>
+                        <a href="drip.html">Gluta Drip</a>
+                    </div>
                 </div>
-            </div>
-            <div class="dropdown">
-                <a>Information</a>
-                <div class="dropdown-content">
-                    <a href="benefits.html">Benefits</a>
-                    <a href="about.html">About Us</a>
+                <div class="dropdown">
+                    <a>Information</a>
+                    <div class="dropdown-content">
+                        <a href="benefits.html">Benefits</a>
+                        <a href="about.html">About Us</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
         <h1><?php echo date('Y'); ?> Calendar</h1>
 
         <!-- Tabs for Months -->
@@ -135,11 +227,11 @@
         <a href="backoffice.php" class="button">Back</a>
     </div>
 
-            <!-- Time Container Section -->
-        <div class="timecontainer">
-            <h2>Time Container</h2>
-            <p>This is where you can add time-related data or other information.</p>
-        </div>
+    <!-- Time Container Section -->
+    <div class="timecontainer">
+        <h2>Time Container</h2>
+        <p>This is where you can add time-related data or other information.</p>
+    </div>
 
     <script>
         // JavaScript to handle tab switching
