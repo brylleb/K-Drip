@@ -100,6 +100,7 @@
         <div class="box-container">
             <div class="box" onclick="location.href='all_member.php';">Member Record</div>
             <div class="box" onclick="location.href='calendar.php';">Appointment Calendar</div>
+            <a href="logout.php" class="button">Back</a>
         </div>
 </body>
 </html>

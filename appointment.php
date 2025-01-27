@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Check if the user is not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login page if not logged in
+    exit();
+}
+
 // Database connection settings
 $servername = "sql205.infinityfree.com";
 $username = "if0_38112458";

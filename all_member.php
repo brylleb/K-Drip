@@ -102,6 +102,13 @@
         <h1>All Member Information</h1>
 
         <?php
+        session_start();
+
+        // Check if the user is not logged in
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: login.php"); // Redirect to login page if not logged in
+            exit();
+        }
         // Check if there is a message passed via URL parameters
         $message = isset($_GET['message']) ? $_GET['message'] : '';
 

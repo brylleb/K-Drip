@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Database connection settings
 $servername = "sql205.infinityfree.com";
 $username = "if0_38112458";
