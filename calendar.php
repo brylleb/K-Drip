@@ -114,7 +114,7 @@
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $currentDate = "$currentYear-" . str_pad($index + 1, 2, "0", STR_PAD_LEFT) . "-" . str_pad($day, 2, "0", STR_PAD_LEFT);
 
-                echo "<div class='day'>";
+                echo "<div class='day'>"; 
                 echo $day;
 
                 // Check if the current date exists in the $appointments array and display all first names for that date
@@ -131,6 +131,13 @@
             echo "</div>"; // Close tab content div
         }
         ?>
+
+        <!-- Time Container Section -->
+        <div class="time-container">
+            <h2>Time Container</h2>
+            <p>This is where you can add time-related data or other information.</p>
+        </div>
+
         <a href="backoffice.php" class="button">Back</a>
     </div>
 
@@ -151,8 +158,5 @@
             });
         });
     </script>
-
-<div class="timecontainer">
-</div>
 </body>
 </html>
