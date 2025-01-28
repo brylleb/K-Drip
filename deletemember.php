@@ -80,7 +80,7 @@ if (isset($_GET['id'])) {
 
     // If Yes is clicked, submit the form to delete the member
     document.getElementById("confirmYes").onclick = function () {
-        // Redirect to the delete page with the ID
+        // Redirect to the delete page with the ID and trigger deletion
         window.location.href = "deletemember.php?delete=yes&id=<?php echo $id; ?>"; // Proceed with deletion
     };
 
