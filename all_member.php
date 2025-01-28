@@ -12,7 +12,7 @@
             margin-top: 80px;
             margin-bottom: 80px;
             background: #e5b7b7;
-            padding: 30px;
+            padding: 8px;
             border-radius: 50px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
