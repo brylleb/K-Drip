@@ -266,49 +266,72 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const allRows = <?php echo json_encode($all_rows ?: []); ?>;
+    document.addEventListener('DOMContentLoaded', function () {
+        const allRows = <?php echo json_encode($all_rows ?: []); ?>;
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.getElementById('tableBody');
 
-            document.getElementById('searchInput').addEventListener('input', function () {
-                const searchValue = this.value.toLowerCase();
-                const tableBody = document.getElementById('tableBody');
-                tableBody.innerHTML = '';
+        function filterRows() {
+            const searchValue = searchInput.value.toLowerCase();
+            tableBody.innerHTML = '';
 
-                const filteredRows = allRows.filter(row => {
-                    return row.first_name.toLowerCase().includes(searchValue);
-                });
-
-                filteredRows.forEach(row => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                        <td>${row.last_name}</td>
-                        <td>${row.contact_number}</td>
-                        <td>${row.email}</td>
-                        <td>${row.birthday}</td>
-                        <td>${row.age}</td>
-                        <td>${row.address}</td>
-                        <td class="action-buttons">
-                            <form style="display:inline;" action="edit.php" method="POST">
-                                <input type="hidden" name="id" value="${row.id}">
-                                <button class="edit-btn" type="submit">Edit</button>
-                            </form>
-                            <form style="display:inline;" action="delete.php" method="POST">
-                                <input type="hidden" name="id" value="${row.id}">
-                                <button class="delete-btn" type="submit">Delete</button>
-                            </form>
-                        </td>
-                    `;
-                    tableBody.appendChild(tr);
-                });
-
-                if (filteredRows.length === 0) {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = "<td colspan='8'>No records found</td>";
-                    tableBody.appendChild(tr);
-                }
+            const filteredRows = allRows.filter(row => {
+                return row.first_name.toLowerCase().includes(searchValue);
             });
+
+            filteredRows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                    <td>${row.last_name}</td>
+                    <td>${row.contact_number}</td>
+                    <td>${row.email}</td>
+                    <td>${row.birthday}</td>
+                    <td>${row.age}</td>
+                    <td>${row.address}</td>
+                    <td class="action-buttons">
+                        <form style="display:inline;" action="edit.php" method="POST">
+                            <input type="hidden" name="id" value="${row.id}">
+                            <button class="edit-btn" type="submit">Edit</button>
+                        </form>
+                        <form style="display:inline;" action="delete.php" method="POST">
+                            <input type="hidden" name="id" value="${row.id}">
+                            <button class="delete-btn" type="submit">Delete</button>
+                        </form>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            if (filteredRows.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = "<td colspan='8'>No records found</td>";
+                tableBody.appendChild(tr);
+            }
+        }
+
+        // Add event listener for the search button
+        searchInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                filterRows();
+            }
         });
-    </script>
+
+        // Optionally, you can add a search icon button
+        const searchButton = document.createElement('button');
+        searchButton.textContent = 'Search';
+        searchButton.style.padding = '10px';
+        searchButton.style.marginLeft = '10px';
+        searchButton.style.fontSize = '16px';
+        searchButton.style.cursor = 'pointer';
+        searchButton.style.border = '1px solid #ddd';
+        searchButton.style.borderRadius = '5px';
+
+        searchButton.addEventListener('click', filterRows);
+
+        // Append the button next to the search input
+        searchInput.parentNode.appendChild(searchButton);
+    });
+</script>
 </body>
 </html>
