@@ -1,6 +1,32 @@
 <?php
 session_start();
+// Secure session settings
+ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
+ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
 
+// Set the session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeout_duration = 900;
+
+// Check session expiration
+if (isset($_SESSION['last_activity'])) {
+    $elapsed_time = time() - $_SESSION['last_activity'];
+    if ($elapsed_time > $timeout_duration) {
+        session_unset();     // Unset all session variables
+        session_destroy();   // Destroy the session
+        header("Location: login.php?message=session_expired"); // Redirect to login with an error message
+        exit();
+    }
+}
+
+// Update last activity time
+$_SESSION['last_activity'] = time();
+
+// Regenerate session ID periodically to prevent fixation
+if (!isset($_SESSION['regenerated'])) {
+    session_regenerate_id(true); // Regenerate session ID
+    $_SESSION['regenerated'] = true; // Mark as regenerated
+}
 // Check if the user is not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to login page if not logged in
