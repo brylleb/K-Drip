@@ -6,7 +6,7 @@
     <title>Member Information</title>
     <link rel="stylesheet" href="mainpage.css">
     <style>
-                .allmembercontainer {
+        .allmembercontainer {
             width: 100%;
             max-width: 1200px;
             margin: 130px auto 80px auto;
@@ -266,55 +266,49 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Check if the PHP variable is properly passed to JS
-    const allRows = <?php echo json_encode($all_rows ?: []); ?>;
-    console.log(allRows); // Add this to verify the data passed from PHP
+        document.addEventListener('DOMContentLoaded', function () {
+            const allRows = <?php echo json_encode($all_rows ?: []); ?>;
 
-    // Function to filter the table based on the search input
-    document.getElementById('searchInput').addEventListener('input', function () {
-        const searchValue = this.value.toLowerCase();
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = ''; // Clear the table
+            document.getElementById('searchInput').addEventListener('input', function () {
+                const searchValue = this.value.toLowerCase();
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = '';
 
-        // Filter rows based on the search value
-        const filteredRows = allRows.filter(row => {
-            return row.first_name.toLowerCase().includes(searchValue);
+                const filteredRows = allRows.filter(row => {
+                    return row.first_name.toLowerCase().includes(searchValue);
+                });
+
+                filteredRows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                        <td>${row.last_name}</td>
+                        <td>${row.contact_number}</td>
+                        <td>${row.email}</td>
+                        <td>${row.birthday}</td>
+                        <td>${row.age}</td>
+                        <td>${row.address}</td>
+                        <td class="action-buttons">
+                            <form style="display:inline;" action="edit.php" method="POST">
+                                <input type="hidden" name="id" value="${row.id}">
+                                <button class="edit-btn" type="submit">Edit</button>
+                            </form>
+                            <form style="display:inline;" action="delete.php" method="POST">
+                                <input type="hidden" name="id" value="${row.id}">
+                                <button class="delete-btn" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                if (filteredRows.length === 0) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = "<td colspan='8'>No records found</td>";
+                    tableBody.appendChild(tr);
+                }
+            });
         });
-
-        // Populate the table with filtered rows
-        filteredRows.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                <td>${row.last_name}</td>
-                <td>${row.contact_number}</td>
-                <td>${row.email}</td>
-                <td>${row.birthday}</td>
-                <td>${row.age}</td>
-                <td>${row.address}</td>
-                <td class="action-buttons">
-                    <form style="display:inline;" action="edit.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="edit-btn" type="submit">Edit</button>
-                    </form>
-                    <form style="display:inline;" action="delete.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="delete-btn" type="submit">Delete</button>
-                    </form>
-                </td>
-            `;
-            tableBody.appendChild(tr);
-        });
-
-        // If no filtered rows, show a "No records found" message
-        if (filteredRows.length === 0) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = "<td colspan='8'>No records found</td>";
-            tableBody.appendChild(tr);
-        }
-    });
-});
-</script>
+    </script>
 </body>
 </html>
