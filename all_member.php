@@ -6,7 +6,7 @@
     <title>Member Information</title>
     <link rel="stylesheet" href="mainpage.css">
     <style>
-        .container {
+        .allmembercontainer {
             width: 100%;
             max-width: 1200px;
             margin-top: 75px;
@@ -98,7 +98,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="allmembercontainer">
         <h1>All Member Information</h1>
 
         <?php
