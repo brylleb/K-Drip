@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             
             try {
                 // SQL query to delete the member profile by member_id
-                $sql_profile = "DELETE FROM member_profile WHERE member_id = ?";
+                $sql_profile = "DELETE FROM member_profile WHERE id = ?";
                 $stmt_profile = $conn->prepare($sql_profile);
                 $stmt_profile->bind_param("i", $member_id);
                 $stmt_profile->execute();
