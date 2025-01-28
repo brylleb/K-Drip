@@ -266,45 +266,47 @@
     </div>
 
     <script>
-    // Store the entire dataset as a global variable (this will be populated dynamically with PHP)
-    const allRows = <?php echo json_encode($all_rows); ?>;
+    document.addEventListener('DOMContentLoaded', function () {
+        // Store the entire dataset as a global variable (this will be populated dynamically with PHP)
+        const allRows = <?php echo json_encode($all_rows); ?>;
 
-    // Function to filter the table based on the search input
-    document.getElementById('searchInput').addEventListener('input', function () {
-        const searchValue = this.value.toLowerCase();
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = ''; // Clear the table
+        // Function to filter the table based on the search input
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = ''; // Clear the table
 
-        // Filter rows based on the search value
-        const filteredRows = allRows.filter(row => {
-            return row.first_name.toLowerCase().includes(searchValue);
-        });
+            // Filter rows based on the search value
+            const filteredRows = allRows.filter(row => {
+                return row.first_name.toLowerCase().includes(searchValue);
+            });
 
-        // Populate the table with filtered rows
-        filteredRows.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                <td>${row.last_name}</td>
-                <td>${row.contact_number}</td>
-                <td>${row.email}</td>
-                <td>${row.birthday}</td>
-                <td>${row.age}</td>
-                <td>${row.address}</td>
-                <td class="action-buttons">
-                    <form style="display:inline;" action="edit.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="edit-btn" type="submit">Edit</button>
-                    </form>
-                    <form style="display:inline;" action="delete.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="delete-btn" type="submit">Delete</button>
-                    </form>
-                </td>
-            `;
-            tableBody.appendChild(tr);
+            // Populate the table with filtered rows
+            filteredRows.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                    <td>${row.last_name}</td>
+                    <td>${row.contact_number}</td>
+                    <td>${row.email}</td>
+                    <td>${row.birthday}</td>
+                    <td>${row.age}</td>
+                    <td>${row.address}</td>
+                    <td class="action-buttons">
+                        <form style="display:inline;" action="edit.php" method="POST">
+                            <input type="hidden" name="id" value="${row.id}">
+                            <button class="edit-btn" type="submit">Edit</button>
+                        </form>
+                        <form style="display:inline;" action="delete.php" method="POST">
+                            <input type="hidden" name="id" value="${row.id}">
+                            <button class="delete-btn" type="submit">Delete</button>
+                        </form>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
         });
     });
-    </script>
+</script>
 </body>
 </html>
