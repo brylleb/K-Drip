@@ -1,4 +1,8 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Initialize message variable
 $message = '';
 
@@ -19,27 +23,25 @@ if ($conn->connect_error) {
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Collect form data and sanitize it
-    //$username = htmlspecialchars(trim($_POST['username']));
     $first_name = htmlspecialchars(trim($_POST['first_name']));
     $last_name = htmlspecialchars(trim($_POST['last_name']));
     $contact_number = htmlspecialchars(trim($_POST['contact_number']));
-    //$email = htmlspecialchars(trim($_POST['email']));
     $birthday = htmlspecialchars(trim($_POST['birthday']));
     $age = htmlspecialchars(trim($_POST['age']));
     $address = htmlspecialchars(trim($_POST['address']));
-    //$password = htmlspecialchars(trim($_POST['password']));
+    // $password = htmlspecialchars(trim($_POST['password'])); // Assuming the password field is there in the form
 
     // Check if any required field is empty
     if (empty($first_name) || empty($last_name) || empty($contact_number) || empty($birthday) || empty($age) || empty($address)) {
         $message = "All fields are required!";
     } else {
         // Hash the password using password_hash()
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT); // If you want to store the hashed password
 
         // Prepare the SQL query to insert data using parameterized queries
         $stmt = $conn->prepare("INSERT INTO reg_member (first_name, last_name, contact_number, birthday, age, address) 
-                                VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $first_name, $last_name, $contact_number, $birthday, $age, $address);
+                                VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssss", $first_name, $last_name, $contact_number, $birthday, $age, $address);
 
         // Execute the query and check for success
         if ($stmt->execute()) {
