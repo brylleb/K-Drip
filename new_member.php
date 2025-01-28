@@ -15,7 +15,6 @@ if (isset($_SESSION['last_activity'])) {
     if ($elapsed_time > $timeout_duration) {
         session_unset();     // Unset all session variables
         session_destroy();   // Destroy the session
-        header("Location: login.php?message=session_expired"); // Redirect to login with an error message
         exit();
     }
 }
@@ -27,12 +26,6 @@ $_SESSION['last_activity'] = time();
 if (!isset($_SESSION['regenerated'])) {
     session_regenerate_id(true); // Regenerate session ID
     $_SESSION['regenerated'] = true; // Mark as regenerated
-}
-
-// Check if the user is not logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Redirect to login page if not logged in
-    exit();
 }
 ?>
 
