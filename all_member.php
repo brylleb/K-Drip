@@ -9,7 +9,7 @@
         .container {
             width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
+            margin-top: 75px;
             background: #e5b7b7;
             padding: 20px;
             border-radius: 50px;
