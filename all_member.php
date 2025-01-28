@@ -266,56 +266,51 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const allRows = <?php echo json_encode($all_rows ?: []); ?>;
-        const searchInput = document.getElementById('searchInput');
-        const tableBody = document.getElementById('tableBody');
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const tableBody = document.getElementById('tableBody');
 
-        function filterRows() {
-            const searchValue = searchInput.value.toLowerCase();
-            tableBody.innerHTML = '';
-
-            const filteredRows = allRows.filter(row => {
-                return row.first_name.toLowerCase().includes(searchValue);
-            });
-
-            filteredRows.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                    <td>${row.last_name}</td>
-                    <td>${row.contact_number}</td>
-                    <td>${row.email}</td>
-                    <td>${row.birthday}</td>
-                    <td>${row.age}</td>
-                    <td>${row.address}</td>
-                    <td class="action-buttons">
-                        <form style="display:inline;" action="edit.php" method="POST">
-                            <input type="hidden" name="id" value="${row.id}">
-                            <button class="edit-btn" type="submit">Edit</button>
-                        </form>
-                        <form style="display:inline;" action="delete.php" method="POST">
-                            <input type="hidden" name="id" value="${row.id}">
-                            <button class="delete-btn" type="submit">Delete</button>
-                        </form>
-                    </td>
-                `;
-                tableBody.appendChild(tr);
-            });
-
-            if (filteredRows.length === 0) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = "<td colspan='8'>No records found</td>";
-                tableBody.appendChild(tr);
-            }
+    searchInput.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const searchValue = searchInput.value.trim();
+            fetch(`search.php?query=${encodeURIComponent(searchValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    tableBody.innerHTML = ''; // Clear the table
+                    if (data.length > 0) {
+                        data.forEach(row => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                                <td>${row.last_name}</td>
+                                <td>${row.contact_number}</td>
+                                <td>${row.email}</td>
+                                <td>${row.birthday}</td>
+                                <td>${row.age}</td>
+                                <td>${row.address}</td>
+                                <td class="action-buttons">
+                                    <form style="display:inline;" action="edit.php" method="POST">
+                                        <input type="hidden" name="id" value="${row.id}">
+                                        <button class="edit-btn" type="submit">Edit</button>
+                                    </form>
+                                    <form style="display:inline;" action="delete.php" method="POST">
+                                        <input type="hidden" name="id" value="${row.id}">
+                                        <button class="delete-btn" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+                    } else {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = "<td colspan='8'>No records found</td>";
+                        tableBody.appendChild(tr);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
+    });
 
-        // Add event listener for the search button
-        searchInput.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                filterRows();
-            }
-        });
 
         // Optionally, you can add a search icon button
         const searchButton = document.createElement('button');
