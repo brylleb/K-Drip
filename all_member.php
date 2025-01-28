@@ -269,46 +269,53 @@
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('tableBody');
+    const originalTableHTML = tableBody.innerHTML; // Store the original table HTML
 
-    searchInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            const searchValue = searchInput.value.trim();
-            fetch(`search.php?query=${encodeURIComponent(searchValue)}`)
-                .then(response => response.json())
-                .then(data => {
-                    tableBody.innerHTML = ''; // Clear the table
-                    if (data.length > 0) {
-                        data.forEach(row => {
-                            const tr = document.createElement('tr');
-                            tr.innerHTML = `
-                                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                                <td>${row.last_name}</td>
-                                <td>${row.contact_number}</td>
-                                <td>${row.email}</td>
-                                <td>${row.birthday}</td>
-                                <td>${row.age}</td>
-                                <td>${row.address}</td>
-                                <td class="action-buttons">
-                                    <form style="display:inline;" action="edit.php" method="POST">
-                                        <input type="hidden" name="id" value="${row.id}">
-                                        <button class="edit-btn" type="submit">Edit</button>
-                                    </form>
-                                    <form style="display:inline;" action="delete.php" method="POST">
-                                        <input type="hidden" name="id" value="${row.id}">
-                                        <button class="delete-btn" type="submit">Delete</button>
-                                    </form>
-                                </td>
-                            `;
-                            tableBody.appendChild(tr);
-                        });
-                    } else {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = "<td colspan='8'>No records found</td>";
-                        tableBody.appendChild(tr);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+    searchInput.addEventListener('input', function () {
+        const searchValue = searchInput.value.trim();
+
+        if (searchValue === '') {
+            // Reset to original table if the input is empty
+            tableBody.innerHTML = originalTableHTML;
+            return;
         }
+
+        // Perform the search dynamically
+        fetch(`search.php?query=${encodeURIComponent(searchValue)}`)
+            .then(response => response.json())
+            .then(data => {
+                tableBody.innerHTML = ''; // Clear the table
+                if (data.length > 0) {
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                            <td>${row.last_name}</td>
+                            <td>${row.contact_number}</td>
+                            <td>${row.email}</td>
+                            <td>${row.birthday}</td>
+                            <td>${row.age}</td>
+                            <td>${row.address}</td>
+                            <td class="action-buttons">
+                                <form style="display:inline;" action="edit.php" method="POST">
+                                    <input type="hidden" name="id" value="${row.id}">
+                                    <button class="edit-btn" type="submit">Edit</button>
+                                </form>
+                                <form style="display:inline;" action="delete.php" method="POST">
+                                    <input type="hidden" name="id" value="${row.id}">
+                                    <button class="delete-btn" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                } else {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = "<td colspan='8'>No records found</td>";
+                    tableBody.appendChild(tr);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     });
 });
 </script>
