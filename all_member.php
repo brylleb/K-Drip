@@ -6,135 +6,147 @@
     <title>Member Information</title>
     <link rel="stylesheet" href="mainpage.css">
     <style>
-  .allmembercontainer {
-    width: 100%;
-    max-width: 1200px;
-    margin: 130px auto 80px auto; /* Center the container horizontally */
-    background: #e5b7b7;
-    padding: 16px; /* Increased padding for better readability */
-    border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
+        .allmembercontainer {
+            width: 100%;
+            max-width: 1200px;
+            margin: 130px auto 80px auto;
+            background: #e5b7b7;
+            padding: 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
 
-.table-wrapper {
-    max-height: 450px;
-    overflow-y: auto;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
+        .table-wrapper {
+            max-height: 450px;
+            overflow-y: auto;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
+        table, th, td {
+            border: 1px solid #ddd;
+        }
 
-th, td {
-    padding: 10px; /* Adjusted padding for better touch interaction */
-    text-align: left;
-    word-wrap: break-word;
-}
+        th, td {
+            padding: 10px;
+            text-align: left;
+            word-wrap: break-word;
+        }
 
-th {
-    background-color: #f4f4f4;
-    font-size: 16px; /* Adjusted for better readability */
-}
+        th {
+            background-color: #f4f4f4;
+            font-size: 16px;
+        }
 
-td {
-    font-size: 14px;
-}
+        td {
+            font-size: 14px;
+        }
 
-.action-buttons button {
-    padding: 8px 12px; /* Slightly larger buttons for better usability */
-    margin: 2px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
+        .action-buttons {
+            display: flex;
+            flex-direction: row; /* Buttons side by side */
+            justify-content: center; /* Center alignment */
+            align-items: center;
+            gap: 8px; /* Spacing between buttons */
+        }
 
-.action-buttons .edit-btn {
-    background-color: #4CAF50;
-    color: white;
-}
+        .action-buttons button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-.action-buttons .delete-btn {
-    background-color: #f44336;
-    color: white;
-}
+        .action-buttons .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
+        .action-buttons .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
 
-.pagination a {
-    padding: 10px 20px; /* Increased padding for better tap targets */
-    margin: 0 5px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 14px;
-}
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-.pagination a:hover {
-    background-color: #0056b3;
-}
+        .pagination a {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-/* Responsive Design */
+        .pagination a:hover {
+            background-color: #0056b3;
+        }
 
-/* Tablets and smaller screens (max-width: 768px) */
-@media screen and (max-width: 768px) {
-    th, td {
-        padding: 8px;
-        font-size: 12px;
-    }
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            th, td {
+                padding: 8px;
+                font-size: 12px;
+            }
 
-    .action-buttons button {
-        font-size: 12px;
-        padding: 6px 8px;
-    }
+            .action-buttons {
+                gap: 6px; /* Reduced spacing for smaller screens */
+            }
 
-    .allmembercontainer {
-        padding: 12px;
-    }
+            .action-buttons button {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
 
-    .pagination a {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-}
+            .allmembercontainer {
+                padding: 12px;
+            }
 
-/* Mobile screens (max-width: 480px) */
-@media screen and (max-width: 480px) {
-    th, td {
-        padding: 6px;
-        font-size: 10px;
-    }
+            .pagination a {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
 
-    .action-buttons button {
-        font-size: 10px;
-        padding: 4px 6px;
-    }
+        @media screen and (max-width: 480px) {
+            th, td {
+                padding: 6px;
+                font-size: 10px;
+            }
 
-    .pagination a {
-        padding: 6px 10px;
-        font-size: 10px;
-    }
+            .action-buttons {
+                gap: 4px; /* Further reduced spacing for tiny screens */
+            }
 
-    .allmembercontainer {
-        margin-top: 100px;
-        margin-bottom: 50px;
-        padding: 10px;
-    }
-}
+            .action-buttons button {
+                font-size: 10px;
+                padding: 4px 6px;
+            }
+
+            .pagination a {
+                padding: 6px 10px;
+                font-size: 10px;
+            }
+
+            .allmembercontainer {
+                margin-top: 100px;
+                margin-bottom: 50px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body style="overflow-y: auto;">
