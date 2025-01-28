@@ -17,7 +17,7 @@
         }
 
         .table-wrapper {
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
