@@ -13,9 +13,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['id']) && !empty($_POST['id'])) {
-        $member_id = $_POST['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $member_id = $_GET['id'];
         
         // Check if confirmation is received via GET
         if (isset($_GET['confirm']) && $_GET['confirm'] === 'yes') {
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             if ($stmt->execute()) {
                 // Redirect back to the member list after deletion
-                header("Location: index.php?message=Member deleted successfully");
+                header("Location: all_member.php?message=Member deleted successfully");
                 exit;
             } else {
                 echo "Error: " . $stmt->error;
