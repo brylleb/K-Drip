@@ -8,6 +8,52 @@ if (isset($_GET['id'])) {
     header("Location: all_member.php");
     exit();
 }
+
+// Handle deletion after confirmation (only if "delete" is set in the URL)
+if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
+    // Get the member ID from the URL
+    $id = $_GET['id'];
+
+    // Database connection settings
+    $servername = "sql205.infinityfree.com";
+    $username = "if0_38112458";
+    $password = "8YH7MFDryvDx8";
+    $dbname = "if0_38112458_kdrip_database";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // SQL query to delete the member with the given ID
+    $sql = "DELETE FROM reg_member WHERE id = ?";
+
+    // Prepare the statement to prevent SQL injection
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind the 'id' parameter to the query
+        $stmt->bind_param("i", $id);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            // Redirect to the member list page after successful deletion
+            header("Location: all_member.php");
+            exit(); // Ensure the script stops executing here after redirection
+        } else {
+            echo "Error deleting record: " . $conn->error;
+        }
+
+        // Close the prepared statement
+        $stmt->close();
+    } else {
+        echo "Error preparing the SQL statement.";
+    }
+
+    // Close the connection
+    $conn->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -89,54 +135,6 @@ if (isset($_GET['id'])) {
         window.location.href = "all_member.php"; // Redirect back to the member list
     };
 </script>
-
-<?php
-// Handle deletion after confirmation (only if "delete" is set in the URL)
-if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
-    // Get the member ID from the URL
-    $id = $_GET['id'];
-
-    // Database connection settings
-    $servername = "sql205.infinityfree.com";
-    $username = "if0_38112458";
-    $password = "8YH7MFDryvDx8";
-    $dbname = "if0_38112458_kdrip_database";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // SQL query to delete the member with the given ID
-    $sql = "DELETE FROM reg_member WHERE id = ?";
-
-    // Prepare the statement to prevent SQL injection
-    if ($stmt = $conn->prepare($sql)) {
-        // Bind the 'id' parameter to the query
-        $stmt->bind_param("i", $id);
-
-        // Execute the query
-        if ($stmt->execute()) {
-            // Redirect to the member list page after successful deletion
-            header("Location: all_member.php");
-            exit(); // Ensure the script stops executing here after redirection
-        } else {
-            echo "Error deleting record: " . $conn->error;
-        }
-
-        // Close the prepared statement
-        $stmt->close();
-    } else {
-        echo "Error preparing the SQL statement.";
-    }
-
-    // Close the connection
-    $conn->close();
-}
-?>
 
 </body>
 </html>
