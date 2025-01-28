@@ -24,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             
             try {
                 // SQL query to delete the member profile by member_id
-                $sql_profile = "DELETE FROM member_profile WHERE id = ?";
+                $sql_profile = "DELETE FROM reg_member WHERE id = ?";
                 $stmt_profile = $conn->prepare($sql_profile);
                 $stmt_profile->bind_param("i", $member_id);
                 $stmt_profile->execute();
 
-                // SQL query to delete the member by ID
-                $sql_member = "DELETE FROM reg_member WHERE id = ?";
+                // SQL query to delete from member_profile using reg_member_id
+                $sql_member = "DELETE FROM member_profile WHERE reg_member_id = ?";
                 $stmt_member = $conn->prepare($sql_member);
                 $stmt_member->bind_param("i", $member_id);
                 $stmt_member->execute();
