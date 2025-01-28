@@ -100,7 +100,7 @@
 </head>
 <body style="overflow-y: auto;">
     <div class="allmembercontainer">
-        <h1>All Member Information</h1>
+        <h1 style="text-align: center;">All Member Information</h1>
 
         <?php
         session_start();
