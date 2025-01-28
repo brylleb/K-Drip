@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <input type="hidden" name="id" value="${row.id}">
                                     <button class="edit-btn" type="submit">Edit</button>
                                 </form>
-                                <form style="display:inline;" action="delete.php" method="POST">
+                                <form style="display:inline;" action="deletemember.php" method="POST">
                                     <input type="hidden" name="id" value="${row.id}">
                                     <button class="delete-btn" type="submit">Delete</button>
                                 </form>
