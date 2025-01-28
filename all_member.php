@@ -215,7 +215,7 @@ $dbname = "if0_38112458_kdrip_database";
                     }
 
                     // Pagination logic
-                    $records_per_page = 10;
+                    $records_per_page = 5;
                     $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                     $offset = ($current_page - 1) * $records_per_page;
 
