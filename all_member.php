@@ -6,7 +6,7 @@
     <title>Member Information</title>
     <link rel="stylesheet" href="mainpage.css">
     <style>
-        .allmembercontainer {
+                .allmembercontainer {
             width: 100%;
             max-width: 1200px;
             margin: 130px auto 80px auto;
@@ -185,11 +185,11 @@
                 </thead>
                 <tbody id="tableBody">
                     <?php
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+                    // Database connection settings
+                    $servername = "sql205.infinityfree.com";
+                    $username = "if0_38112458";
+                    $password = "8YH7MFDryvDx8";
+                    $dbname = "if0_38112458_kdrip_database";
 
                     // Create connection
                     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -211,10 +211,11 @@ $dbname = "if0_38112458_kdrip_database";
                             LIMIT $records_per_page OFFSET $offset";
                     $result = $conn->query($sql);
 
-                    // Check if there are rows to display
+                    // Fetch all rows and store them in a JavaScript-friendly format
+                    $all_rows = [];
                     if ($result->num_rows > 0) {
-                        // Output data for each row
                         while ($row = $result->fetch_assoc()) {
+                            $all_rows[] = $row;
                             echo "<tr>";
                             echo "<td><a href='profile.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['first_name']) . "</a></td>";
                             echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
@@ -262,26 +263,48 @@ $dbname = "if0_38112458_kdrip_database";
             <?php endif; ?>
             <a href="backoffice.php" class="button">Back</a>
         </div>
-            </div>
+    </div>
 
-        <script>
-        // JavaScript for filtering table rows based on search input
-        document.getElementById('searchInput').addEventListener('input', function () {
-            const searchValue = this.value.toLowerCase();
-            const tableRows = document.querySelectorAll('#tableBody tr');
+    <script>
+    // Store the entire dataset as a global variable
+    const allRows = <?php echo json_encode($all_rows); ?>;
 
-            tableRows.forEach(row => {
-                const firstNameCell = row.cells[0].textContent.toLowerCase();
-                if (firstNameCell.includes(searchValue)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+    // Function to filter the table based on the search input
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const searchValue = this.value.toLowerCase();
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = ''; // Clear the table
+
+        // Filter rows based on the search value
+        const filteredRows = allRows.filter(row => {
+            return row.first_name.toLowerCase().includes(searchValue);
         });
+
+        // Populate the table with filtered rows
+        filteredRows.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+                <td>${row.last_name}</td>
+                <td>${row.contact_number}</td>
+                <td>${row.email}</td>
+                <td>${row.birthday}</td>
+                <td>${row.age}</td>
+                <td>${row.address}</td>
+                <td class="action-buttons">
+                    <form style="display:inline;" action="edit.php" method="POST">
+                        <input type="hidden" name="id" value="${row.id}">
+                        <button class="edit-btn" type="submit">Edit</button>
+                    </form>
+                    <form style="display:inline;" action="delete.php" method="POST">
+                        <input type="hidden" name="id" value="${row.id}">
+                        <button class="delete-btn" type="submit">Delete</button>
+                    </form>
+                </td>
+            `;
+            tableBody.appendChild(tr);
+        });
+    });
     </script>
 </body>
 </html>
-
-
-
