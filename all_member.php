@@ -229,7 +229,7 @@
                         echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
                         echo "<button class='edit-btn' type='submit'>Edit</button>";
                         echo "</form>";
-                        echo "<form style='display:inline;' action='delete.php' method='POST'>";
+                        echo "<form style='display:inline;' action='deletemember.php' method='POST'>";
                         echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
                         echo "<button class='delete-btn' type='submit'>Delete</button>";
                         echo "</form>";
