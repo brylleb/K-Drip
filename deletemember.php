@@ -126,6 +126,9 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
 
     // If Yes is clicked, submit the form to delete the member
     document.getElementById("confirmYes").onclick = function () {
+        // Debugging: Add alert to ensure the redirect happens
+        alert("Redirecting to delete: deletemember.php?delete=yes&id=<?php echo $id; ?>");
+        
         // Redirect to the delete page with the ID and trigger deletion
         window.location.href = "deletemember.php?delete=yes&id=<?php echo $id; ?>"; // Proceed with deletion
     };
