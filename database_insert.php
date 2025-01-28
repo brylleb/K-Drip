@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Prepare the SQL query to insert data using parameterized queries
         $stmt = $conn->prepare("INSERT INTO reg_member (first_name, last_name, contact_number, birthday, age, address) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $first_name, $last_name, $contact_number, $birthday, $age, $address);
+                                VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $first_name, $last_name, $contact_number, $birthday, $age, $address);
 
         // Execute the query and check for success
         if ($stmt->execute()) {
