@@ -1,32 +1,30 @@
 <?php
-// Check if the 'id' parameter is set in the GET request (not POST)
+// Check if 'id' parameter is set in the URL for deletion
 if (isset($_GET['id'])) {
-    // Get the member ID from the URL
     $id = $_GET['id'];
 } else {
-    // If no ID, redirect to the members list page
+    // Redirect to the member list page if no ID is provided
     header("Location: all_member.php");
     exit();
 }
 
-// Handle deletion after confirmation (only if "delete" is set in the URL)
-if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
-    // Get the member ID from the URL
-    $id = $_GET['id'];
+// Database connection settings
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database";
 
-    // Database connection settings
-    $servername = "sql205.infinityfree.com";
-    $username = "if0_38112458";
-    $password = "8YH7MFDryvDx8";
-    $dbname = "if0_38112458_kdrip_database";
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+// Handle deletion after confirmation
+if (isset($_POST['delete']) && $_POST['delete'] == 'yes') {
+    $id = $_POST['id'];
 
     // SQL query to delete the member with the given ID
     $sql = "DELETE FROM reg_member WHERE id = ?";
@@ -50,10 +48,10 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
     } else {
         echo "Error preparing the SQL statement.";
     }
-
-    // Close the connection
-    $conn->close();
 }
+
+// Close the connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -114,26 +112,21 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes' && isset($_GET['id'])) {
 <div id="confirmationModal" class="modal">
     <div class="modal-content">
         <h2>Are you sure you want to delete this member?</h2>
-        <button id="confirmYes" class="modal-button yes-btn">Yes</button>
+        <form action="deletemember.php" method="POST">
+            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
+            <input type="hidden" name="delete" value="yes">
+            <button type="submit" class="modal-button yes-btn">Yes</button>
+        </form>
         <button id="confirmNo" class="modal-button no-btn">No</button>
     </div>
 </div>
 
 <!-- JavaScript for handling confirmation -->
 <script>
-    // Show modal on page load
+    // Show the modal when the page loads
     document.getElementById("confirmationModal").style.display = "block";
 
-    // If Yes is clicked, submit the form to delete the member
-    document.getElementById("confirmYes").onclick = function () {
-        // Debugging: Add alert to ensure the redirect happens
-        alert("Redirecting to delete: deletemember.php?delete=yes&id=<?php echo $id; ?>");
-        
-        // Redirect to the delete page with the ID and trigger deletion
-        window.location.href = "deletemember.php?delete=yes&id=<?php echo $id; ?>"; // Proceed with deletion
-    };
-
-    // If No is clicked, close the modal and redirect back to the member list
+    // If No is clicked, redirect back to the member list
     document.getElementById("confirmNo").onclick = function () {
         window.location.href = "all_member.php"; // Redirect back to the member list
     };
