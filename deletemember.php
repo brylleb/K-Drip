@@ -19,18 +19,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         // Check if confirmation is received via GET
         if (isset($_GET['confirm']) && $_GET['confirm'] === 'yes') {
-            // SQL query to delete the member by ID
-            $sql = "DELETE FROM reg_member WHERE id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $member_id);
+            // Start the transaction to ensure both deletes happen or neither
+            $conn->begin_transaction();
             
-            // Execute the query and check if it's successful
-            if ($stmt->execute()) {
+            try {
+                // SQL query to delete the member profile by member_id
+                $sql_profile = "DELETE FROM member_profile WHERE member_id = ?";
+                $stmt_profile = $conn->prepare($sql_profile);
+                $stmt_profile->bind_param("i", $member_id);
+                $stmt_profile->execute();
+
+                // SQL query to delete the member by ID
+                $sql_member = "DELETE FROM reg_member WHERE id = ?";
+                $stmt_member = $conn->prepare($sql_member);
+                $stmt_member->bind_param("i", $member_id);
+                $stmt_member->execute();
+
+                // Commit the transaction if both deletions are successful
+                $conn->commit();
+
                 // Redirect back to the member list after deletion
-                header("Location: all_member.php?message=Member deleted successfully");
+                header("Location: all_member.php?message=Member and profile deleted successfully");
                 exit;
-            } else {
-                echo "Error: " . $stmt->error;
+            } catch (Exception $e) {
+                // Rollback the transaction if an error occurs
+                $conn->rollback();
+                echo "Error: " . $e->getMessage();
             }
         } else {
             // Ask for confirmation before deleting
