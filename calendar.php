@@ -70,7 +70,6 @@ exit();
     </style>
 </head>
 <body style="height: 100%">
-    <div class="container"> 
         <div class="banner">
             <a href="index.html">K-Drip</a>
             <div class="right">
@@ -97,7 +96,6 @@ exit();
                 </div>
             </div>
         </div>
-    </div>
     <div class="calendarcontainer"> 
         <h1><?php echo date('Y'); ?> Calendar</h1>
 
