@@ -61,7 +61,6 @@ exit();
     text-align: center;
 }
 
-
         .message-box p {
             margin: 0;
             font-size: 0.9rem;

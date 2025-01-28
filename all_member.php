@@ -309,22 +309,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => console.error('Error:', error));
         }
-                // Optionally, you can add a search icon button
-                const searchButton = document.createElement('button');
-        searchButton.textContent = 'Search';
-        searchButton.style.padding = '10px';
-        searchButton.style.marginLeft = '10px';
-        searchButton.style.fontSize = '16px';
-        searchButton.style.cursor = 'pointer';
-        searchButton.style.border = '1px solid #ddd';
-        searchButton.style.borderRadius = '5px';
-
-        searchButton.addEventListener('click', filterRows);
-
-        // Append the button next to the search input
-        searchInput.parentNode.appendChild(searchButton);
     });
-    });
+});
 </script>
 </body>
 </html>
