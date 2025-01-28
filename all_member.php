@@ -184,71 +184,71 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <?php
-                    // Database connection settings
-                    $servername = "sql205.infinityfree.com";
-                    $username = "if0_38112458";
-                    $password = "8YH7MFDryvDx8";
-                    $dbname = "if0_38112458_kdrip_database";
+                <?php
+// Database connection settings
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database";
 
-                    // Create connection
-                    $conn = new mysqli($servername, $username, $password, $dbname);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-                    // Check connection
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-                    // Pagination logic
-                    $records_per_page = 5;
-                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                    $offset = ($current_page - 1) * $records_per_page;
+// Pagination logic
+$records_per_page = 5;
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($current_page - 1) * $records_per_page;
 
-                    // Updated SQL query to order by first name alphabetically
-                    $sql = "SELECT id, first_name, last_name, contact_number, email, birthday, age, address 
-                            FROM reg_member 
-                            ORDER BY first_name ASC 
-                            LIMIT $records_per_page OFFSET $offset";
-                    $result = $conn->query($sql);
+// Updated SQL query to order by first name alphabetically
+$sql = "SELECT id, first_name, last_name, contact_number, email, birthday, age, address 
+        FROM reg_member 
+        ORDER BY first_name ASC 
+        LIMIT $records_per_page OFFSET $offset";
+$result = $conn->query($sql);
 
-                    // Fetch all rows and store them in a JavaScript-friendly format
-                    $all_rows = [];
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $all_rows[] = $row;
-                            echo "<tr>";
-                            echo "<td><a href='profile.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['first_name']) . "</a></td>";
-                            echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['contact_number']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['birthday']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['age']) . "</td>";
-                            echo "<td>" . htmlspecialchars($row['address']) . "</td>";
-                            echo "<td class='action-buttons'>";
-                            echo "<form style='display:inline;' action='edit.php' method='POST'>";
-                            echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
-                            echo "<button class='edit-btn' type='submit'>Edit</button>";
-                            echo "</form>";
-                            echo "<form style='display:inline;' action='delete.php' method='POST'>";
-                            echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
-                            echo "<button class='delete-btn' type='submit'>Delete</button>";
-                            echo "</form>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='8'>No records found</td></tr>";
-                    }
+// Fetch all rows and store them in a JavaScript-friendly format
+$all_rows = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $all_rows[] = $row;
+        echo "<tr>";
+        echo "<td><a href='profile.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['first_name']) . "</a></td>";
+        echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['contact_number']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['birthday']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['age']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['address']) . "</td>";
+        echo "<td class='action-buttons'>";
+        echo "<form style='display:inline;' action='edit.php' method='POST'>";
+        echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
+        echo "<button class='edit-btn' type='submit'>Edit</button>";
+        echo "</form>";
+        echo "<form style='display:inline;' action='delete.php' method='POST'>";
+        echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
+        echo "<button class='delete-btn' type='submit'>Delete</button>";
+        echo "</form>";
+        echo "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='8'>No records found</td></tr>";
+}
 
-                    // Get total number of records
-                    $sql_count = "SELECT COUNT(id) AS total_records FROM reg_member";
-                    $result_count = $conn->query($sql_count);
-                    $total_records = $result_count->fetch_assoc()['total_records'];
-                    $total_pages = ceil($total_records / $records_per_page);
+// Get total number of records
+$sql_count = "SELECT COUNT(id) AS total_records FROM reg_member";
+$result_count = $conn->query($sql_count);
+$total_records = $result_count->fetch_assoc()['total_records'];
+$total_pages = ceil($total_records / $records_per_page);
 
-                    // Close connection
-                    $conn->close();
-                    ?>
+// Close connection
+$conn->close();
+?>
                 </tbody>
             </table>
         </div>
@@ -266,45 +266,45 @@
     </div>
 
     <script>
-    // Store the entire dataset as a global variable
-    const allRows = <?php echo json_encode($all_rows); ?>;
+// Store the entire dataset as a global variable (this will be populated dynamically with PHP)
+const allRows = <?php echo json_encode($all_rows); ?>;
 
-    // Function to filter the table based on the search input
-    document.getElementById('searchInput').addEventListener('input', function () {
-        const searchValue = this.value.toLowerCase();
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = ''; // Clear the table
+// Function to filter the table based on the search input
+document.getElementById('searchInput').addEventListener('input', function () {
+    const searchValue = this.value.toLowerCase();
+    const tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML = ''; // Clear the table
 
-        // Filter rows based on the search value
-        const filteredRows = allRows.filter(row => {
-            return row.first_name.toLowerCase().includes(searchValue);
-        });
-
-        // Populate the table with filtered rows
-        filteredRows.forEach(row => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
-                <td>${row.last_name}</td>
-                <td>${row.contact_number}</td>
-                <td>${row.email}</td>
-                <td>${row.birthday}</td>
-                <td>${row.age}</td>
-                <td>${row.address}</td>
-                <td class="action-buttons">
-                    <form style="display:inline;" action="edit.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="edit-btn" type="submit">Edit</button>
-                    </form>
-                    <form style="display:inline;" action="delete.php" method="POST">
-                        <input type="hidden" name="id" value="${row.id}">
-                        <button class="delete-btn" type="submit">Delete</button>
-                    </form>
-                </td>
-            `;
-            tableBody.appendChild(tr);
-        });
+    // Filter rows based on the search value
+    const filteredRows = allRows.filter(row => {
+        return row.first_name.toLowerCase().includes(searchValue);
     });
-    </script>
+
+    // Populate the table with filtered rows
+    filteredRows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><a href="profile.php?id=${row.id}">${row.first_name}</a></td>
+            <td>${row.last_name}</td>
+            <td>${row.contact_number}</td>
+            <td>${row.email}</td>
+            <td>${row.birthday}</td>
+            <td>${row.age}</td>
+            <td>${row.address}</td>
+            <td class="action-buttons">
+                <form style="display:inline;" action="edit.php" method="POST">
+                    <input type="hidden" name="id" value="${row.id}">
+                    <button class="edit-btn" type="submit">Edit</button>
+                </form>
+                <form style="display:inline;" action="delete.php" method="POST">
+                    <input type="hidden" name="id" value="${row.id}">
+                    <button class="delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
+        `;
+        tableBody.appendChild(tr);
+    });
+});
+</script>
 </body>
 </html>
