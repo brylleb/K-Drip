@@ -98,6 +98,7 @@
     </style>
 </head>
 <body>
+<div class="container">
     <div class="allmembercontainer">
         <h1>All Member Information</h1>
 
@@ -237,5 +238,6 @@ $dbname = "if0_38112458_kdrip_database";
             <?php endif; ?>
             <a href="backoffice.php" class="button">Back</a>
         </div>
+            </div>
 </body>
 </html>
