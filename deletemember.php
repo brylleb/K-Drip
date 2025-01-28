@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (confirmation) {
                     window.location.href = 'deletemember.php?id=" . $member_id . "&confirm=yes';
                 } else {
-                    window.location.href = 'index.php';
+                    window.location.href = 'all_member.php';
                 }
             </script>";
         }
