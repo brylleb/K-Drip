@@ -68,115 +68,115 @@ $conn->close();
     <style>
         /* Styles for the popup modal */
         /* Modal Wrapper */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
-/* Modal Content */
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Default width */
-    max-width: 400px; /* Max width for larger screens */
-    border-radius: 10px;
-    text-align: center;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-}
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Default width */
+            max-width: 400px; /* Max width for larger screens */
+            border-radius: 10px;
+            text-align: center;
+            box-sizing: border-box; /* Ensure padding doesn't affect width */
+        }
 
-/* Modal Buttons */
-.modal button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
+        /* Modal Buttons */
+        .modal button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
 
-.modal button:hover {
-    background-color: #45a049;
-}
+        .modal button:hover {
+            background-color: #45a049;
+        }
 
-/* Responsive Styling for Small Screens */
-@media screen and (max-width: 768px) {
-    .modal-content {
-        width: 90%; /* Increase width on smaller screens */
-        margin: 20% auto; /* Adjust vertical margin for better centering */
-    }
+        /* Responsive Styling for Small Screens */
+        @media screen and (max-width: 768px) {
+            .modal-content {
+                width: 90%; /* Increase width on smaller screens */
+                margin: 20% auto; /* Adjust vertical margin for better centering */
+            }
 
-    .modal button {
-        font-size: 14px; /* Smaller font size for mobile */
-        padding: 8px 16px; /* Adjust button padding */
-    }
-}
+            .modal button {
+                font-size: 14px; /* Smaller font size for mobile */
+                padding: 8px 16px; /* Adjust button padding */
+            }
+        }
 
-@media screen and (max-width: 480px) {
-    .modal-content {
-        width: 95%; /* Make the modal take up more width on very small screens */
-        padding: 15px; /* Adjust padding */
-        margin: 25% auto; /* Adjust vertical margin for smaller screens */
-    }
+        @media screen and (max-width: 480px) {
+            .modal-content {
+                width: 95%; /* Make the modal take up more width on very small screens */
+                padding: 15px; /* Adjust padding */
+                margin: 25% auto; /* Adjust vertical margin for smaller screens */
+            }
 
-    .modal button {
-        font-size: 14px; /* Ensure button text is readable */
-        padding: 10px 18px; /* Adjust padding for buttons */
-    }
-}
-
+            .modal button {
+                font-size: 14px; /* Ensure button text is readable */
+                padding: 10px 18px; /* Adjust padding for buttons */
+            }
+        }
     </style>
 
-        <!-- Modal popup for success/error message -->
-        <?php if ($message != ''): ?>
-            <div id="messageModal" class="modal">
-                <div class="modal-content">
-                    <p><?php echo $message; ?></p>
-                    <button id="closeModalBtn">Close</button>
-                </div>
-            </div>
-        <?php endif; ?>
+</head>
+<body>
 
-        <script>
-    // Show the modal when the message is set
-    <?php if ($message != ''): ?>
-        var modal = document.getElementById('messageModal');
-        modal.style.display = "block";
+    <!-- Modal HTML -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage">Your message here</p>
+            <button id="closeModalBtn">Close</button>
+        </div>
+    </div>
 
-        // Redirect to another page after 5 seconds (optional auto-redirect)
-        setTimeout(function () {
-            window.location.href = "index.html"; // Replace with your desired URL
-        }, 5000);
-    <?php endif; ?>
+    <script>
+        // Show the modal when a message is set (for demonstration, this is manually triggered)
+        window.onload = function() {
+            var modal = document.getElementById('messageModal');
+            var message = document.getElementById('modalMessage');
 
-    // Close the modal when the close button is clicked and redirect
-    document.getElementById('closeModalBtn').onclick = function() {
-        var modal = document.getElementById('messageModal');
-        modal.style.display = "none";
-        window.location.href = "index.html"; // Replace with your desired URL
-    }
+            // Example: Set a message dynamically and show the modal
+            message.textContent = "Success! Member registered.";
+            modal.style.display = "block";
+        };
 
-    // Close the modal if the user clicks anywhere outside of it and redirect
-    window.onclick = function(event) {
-        var modal = document.getElementById('messageModal');
-        if (event.target == modal) {
+        // Close the modal when the close button is clicked and redirect
+        document.getElementById('closeModalBtn').onclick = function() {
+            var modal = document.getElementById('messageModal');
             modal.style.display = "none";
             window.location.href = "index.html"; // Replace with your desired URL
         }
-    }
-</script>
+
+        // Close the modal if the user clicks anywhere outside of it and redirect
+        window.onclick = function(event) {
+            var modal = document.getElementById('messageModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+                window.location.href = "index.html"; // Replace with your desired URL
+            }
+        }
+    </script>
+
 </body>
 </html>
