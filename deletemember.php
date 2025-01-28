@@ -29,7 +29,7 @@ if (isset($_POST['id'])) {
         // Execute the query
         if ($stmt->execute()) {
             // Redirect to the member list page (or any other page after successful deletion)
-            header("Location: allmembers.php");
+            header("Location: all_member.php");
             exit(); // Ensure the script stops executing here after redirection
         } else {
             echo "Error deleting record: " . $conn->error;
@@ -45,7 +45,7 @@ if (isset($_POST['id'])) {
     $conn->close();
 } else {
     // If 'id' is not set, redirect to the all members page
-    header("Location: allmembers.php");
+    header("Location: all_member.php");
     exit();
 }
 ?>
@@ -126,7 +126,7 @@ if (isset($_POST['id'])) {
 
     // If No is clicked, close the modal
     document.getElementById("confirmNo").onclick = function () {
-        window.location.href = "allmembers.php"; // Redirect back to the member list
+        window.location.href = "all_member.php"; // Redirect back to the member list
     };
 </script>
 
