@@ -17,6 +17,18 @@
             box-sizing: border-box;
         }
 
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
         .table-wrapper {
             max-height: 450px;
             overflow-y: auto;
@@ -51,10 +63,10 @@
 
         .action-buttons {
             display: flex;
-            flex-direction: row; /* Buttons side by side */
-            justify-content: center; /* Center alignment */
+            flex-direction: row;
+            justify-content: center;
             align-items: center;
-            gap: 8px; /* Spacing between buttons */
+            gap: 8px;
         }
 
         .action-buttons button {
@@ -95,7 +107,6 @@
             background-color: #0056b3;
         }
 
-        /* Responsive Design */
         @media screen and (max-width: 768px) {
             th, td {
                 padding: 8px;
@@ -103,7 +114,7 @@
             }
 
             .action-buttons {
-                gap: 6px; /* Reduced spacing for smaller screens */
+                gap: 6px;
             }
 
             .action-buttons button {
@@ -128,7 +139,7 @@
             }
 
             .action-buttons {
-                gap: 4px; /* Further reduced spacing for tiny screens */
+                gap: 4px;
             }
 
             .action-buttons button {
@@ -153,48 +164,10 @@
     <div class="allmembercontainer">
         <h1 style="text-align: center;">All Member Information</h1>
 
-        <?php
-        session_start();
-// Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
-ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
-ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
-
-// Set the session timeout duration (e.g., 15 minutes = 900 seconds)
-$timeout_duration = 900;
-
-// Check session expiration
-if (isset($_SESSION['last_activity'])) {
-    $elapsed_time = time() - $_SESSION['last_activity'];
-    if ($elapsed_time > $timeout_duration) {
-        session_unset();     // Unset all session variables
-        session_destroy();   // Destroy the session
-        header("Location: login.php?message=session_expired"); // Redirect to login with an error message
-        exit();
-    }
-}
-
-// Update last activity time
-$_SESSION['last_activity'] = time();
-
-// Regenerate session ID periodically to prevent fixation
-if (!isset($_SESSION['regenerated'])) {
-    session_regenerate_id(true); // Regenerate session ID
-    $_SESSION['regenerated'] = true; // Mark as regenerated
-}
-        // Check if the user is not logged in
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: login.php"); // Redirect to login page if not logged in
-            exit();
-        }
-        // Check if there is a message passed via URL parameters
-        $message = isset($_GET['message']) ? $_GET['message'] : '';
-
-        // Show the message if present
-        if ($message) {
-            echo "<script type='text/javascript'>alert('$message');</script>";
-        }
-        ?>
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by First Name...">
+        </div>
 
         <div class="table-wrapper">
             <table>
@@ -210,7 +183,7 @@ if (!isset($_SESSION['regenerated'])) {
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                     <?php
 // Database connection settings
 $servername = "sql205.infinityfree.com";
@@ -289,6 +262,24 @@ $dbname = "if0_38112458_kdrip_database";
             <?php endif; ?>
             <a href="backoffice.php" class="button">Back</a>
         </div>
+            </div>
+
+        <script>
+        // JavaScript for filtering table rows based on search input
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#tableBody tr');
+
+            tableRows.forEach(row => {
+                const firstNameCell = row.cells[0].textContent.toLowerCase();
+                if (firstNameCell.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 
