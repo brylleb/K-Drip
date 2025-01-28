@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("i", $member_id);
             
+            // Execute the query and check if it's successful
             if ($stmt->execute()) {
                 // Redirect back to the member list after deletion
                 header("Location: all_member.php?message=Member deleted successfully");
@@ -43,8 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             </script>";
         }
     } else {
-        echo "Invalid request!";
+        echo "Invalid request! ID is missing.";
     }
+} else {
+    echo "Invalid request! This page should be accessed via GET method.";
 }
 
 $conn->close();
