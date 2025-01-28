@@ -17,20 +17,6 @@
             box-sizing: border-box;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .search-bar input {
-            width: 80%;
-            max-width: 400px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
         .table-wrapper {
             max-height: 450px;
             overflow-y: auto;
@@ -65,10 +51,10 @@
 
         .action-buttons {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
+            flex-direction: row; /* Buttons side by side */
+            justify-content: center; /* Center alignment */
             align-items: center;
-            gap: 8px;
+            gap: 8px; /* Spacing between buttons */
         }
 
         .action-buttons button {
@@ -109,6 +95,7 @@
             background-color: #0056b3;
         }
 
+        /* Responsive Design */
         @media screen and (max-width: 768px) {
             th, td {
                 padding: 8px;
@@ -116,7 +103,7 @@
             }
 
             .action-buttons {
-                gap: 6px;
+                gap: 6px; /* Reduced spacing for smaller screens */
             }
 
             .action-buttons button {
@@ -141,7 +128,7 @@
             }
 
             .action-buttons {
-                gap: 4px;
+                gap: 4px; /* Further reduced spacing for tiny screens */
             }
 
             .action-buttons button {
@@ -166,10 +153,48 @@
     <div class="allmembercontainer">
         <h1 style="text-align: center;">All Member Information</h1>
 
-        <!-- Search Bar -->
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search by First Name">
-        </div>
+        <?php
+        session_start();
+// Secure session settings
+ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
+ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+// Set the session timeout duration (e.g., 15 minutes = 900 seconds)
+$timeout_duration = 900;
+
+// Check session expiration
+if (isset($_SESSION['last_activity'])) {
+    $elapsed_time = time() - $_SESSION['last_activity'];
+    if ($elapsed_time > $timeout_duration) {
+        session_unset();     // Unset all session variables
+        session_destroy();   // Destroy the session
+        header("Location: login.php?message=session_expired"); // Redirect to login with an error message
+        exit();
+    }
+}
+
+// Update last activity time
+$_SESSION['last_activity'] = time();
+
+// Regenerate session ID periodically to prevent fixation
+if (!isset($_SESSION['regenerated'])) {
+    session_regenerate_id(true); // Regenerate session ID
+    $_SESSION['regenerated'] = true; // Mark as regenerated
+}
+        // Check if the user is not logged in
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: login.php"); // Redirect to login page if not logged in
+            exit();
+        }
+        // Check if there is a message passed via URL parameters
+        $message = isset($_GET['message']) ? $_GET['message'] : '';
+
+        // Show the message if present
+        if ($message) {
+            echo "<script type='text/javascript'>alert('$message');</script>";
+        }
+        ?>
 
         <div class="table-wrapper">
             <table>
@@ -185,56 +210,70 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="memberTableBody">
+                <tbody>
                     <?php
-                        $servername = "sql205.infinityfree.com";
-                        $username = "if0_38112458";
-                        $password = "8YH7MFDryvDx8";
-                        $dbname = "if0_38112458_kdrip_database";
+// Database connection settings
+$servername = "sql205.infinityfree.com";
+$username = "if0_38112458";
+$password = "8YH7MFDryvDx8";
+$dbname = "if0_38112458_kdrip_database";
 
-                        $conn = new mysqli($servername, $username, $password, $dbname);
+                    // Create connection
+                    $conn = new mysqli($servername, $username, $password, $dbname);
 
-                        if ($conn->connect_error) {
-                            die("Connection failed: " . $conn->connect_error);
+                    // Check connection
+                    if ($conn->connect_error) {
+                        die("Connection failed: " . $conn->connect_error);
+                    }
+
+                    // Pagination logic
+                    $records_per_page = 5;
+                    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                    $offset = ($current_page - 1) * $records_per_page;
+
+                    // Updated SQL query to order by first name alphabetically
+                    $sql = "SELECT id, first_name, last_name, contact_number, email, birthday, age, address 
+                            FROM reg_member 
+                            ORDER BY first_name ASC 
+                            LIMIT $records_per_page OFFSET $offset";
+                    $result = $conn->query($sql);
+
+                    // Check if there are rows to display
+                    if ($result->num_rows > 0) {
+                        // Output data for each row
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td><a href='profile.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['first_name']) . "</a></td>";
+                            echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['contact_number']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['birthday']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['age']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['address']) . "</td>";
+                            echo "<td class='action-buttons'>";
+                            echo "<form style='display:inline;' action='edit.php' method='POST'>";
+                            echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
+                            echo "<button class='edit-btn' type='submit'>Edit</button>";
+                            echo "</form>";
+                            echo "<form style='display:inline;' action='delete.php' method='POST'>";
+                            echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
+                            echo "<button class='delete-btn' type='submit'>Delete</button>";
+                            echo "</form>";
+                            echo "</td>";
+                            echo "</tr>";
                         }
+                    } else {
+                        echo "<tr><td colspan='8'>No records found</td></tr>";
+                    }
 
-                        $records_per_page = 5;
-                        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-                        $offset = ($current_page - 1) * $records_per_page;
+                    // Get total number of records
+                    $sql_count = "SELECT COUNT(id) AS total_records FROM reg_member";
+                    $result_count = $conn->query($sql_count);
+                    $total_records = $result_count->fetch_assoc()['total_records'];
+                    $total_pages = ceil($total_records / $records_per_page);
 
-                        $sql = "SELECT id, first_name, last_name, contact_number, email, birthday, age, address 
-                                FROM reg_member 
-                                ORDER BY first_name ASC 
-                                LIMIT $records_per_page OFFSET $offset";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td><a href='profile.php?id=" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['first_name']) . "</a></td>";
-                                echo "<td>" . htmlspecialchars($row['last_name']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['contact_number']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['birthday']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['age']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['address']) . "</td>";
-                                echo "<td class='action-buttons'>";
-                                echo "<form style='display:inline;' action='edit.php' method='POST'>";
-                                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
-                                echo "<button class='edit-btn' type='submit'>Edit</button>";
-                                echo "</form>";
-                                echo "<form style='display:inline;' action='delete.php' method='POST'>";
-                                echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
-                                echo "<button class='delete-btn' type='submit'>Delete</button>";
-                                echo "</form>";
-                                echo "</td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='8'>No records found</td></tr>";
-                        }
-
-                        $conn->close();
+                    // Close connection
+                    $conn->close();
                     ?>
                 </tbody>
             </table>
@@ -250,18 +289,8 @@
             <?php endif; ?>
             <a href="backoffice.php" class="button">Back</a>
         </div>
-    </div>
-
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const filter = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#memberTableBody tr');
-
-            rows.forEach(row => {
-                const firstName = row.cells[0].textContent.toLowerCase();
-                row.style.display = firstName.includes(filter) ? '' : 'none';
-            });
-        });
-    </script>
 </body>
 </html>
+
+
+
