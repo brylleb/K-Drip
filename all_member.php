@@ -6,7 +6,7 @@
     <title>Member Information</title>
     <link rel="stylesheet" href="mainpage.css">
     <style>
-        .allmembercontainer {
+                .allmembercontainer {
             width: 100%;
             max-width: 1200px;
             margin: 130px auto 80px auto;
@@ -267,7 +267,7 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Store the entire dataset as a global variable (this will be populated dynamically with PHP)
+        // Passing PHP data into JavaScript
         const allRows = <?php echo json_encode($all_rows); ?>;
 
         // Function to filter the table based on the search input
@@ -307,6 +307,6 @@
             });
         });
     });
-</script>
+    </script>
 </body>
 </html>
