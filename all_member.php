@@ -281,11 +281,11 @@ $dbname = "if0_38112458_kdrip_database";
 
         <!-- Pagination Controls -->
         <div class="pagination">
-            <?php if ($current_page > 1): ?>
-                <a href="?page=<?php echo $current_page - 1; ?>">Previous</a>
-            <?php endif; ?>
             <?php if ($current_page < $total_pages): ?>
                 <a href="?page=<?php echo $current_page + 1; ?>">Next</a>
+            <?php endif; ?>
+            <?php if ($current_page > 1): ?>
+                <a href="?page=<?php echo $current_page - 1; ?>">Previous</a>
             <?php endif; ?>
             <a href="backoffice.php" class="button">Back</a>
         </div>
