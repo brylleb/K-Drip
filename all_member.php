@@ -9,7 +9,7 @@
         .allmembercontainer {
             width: 100%;
             max-width: 1200px;
-            margin-top: 100px;
+            margin-top: 130px;
             margin-bottom: 80px;
             background: #e5b7b7;
             padding: 8px;
