@@ -14,36 +14,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Check if 'id' is passed in the POST request
-if (isset($_POST['id'])) {
+// Check if 'id' is passed in the GET request to show the confirmation box
+if (isset($_GET['id'])) {
     // Sanitize input to prevent SQL injection
-    $id = (int) $_POST['id'];  // Make sure it's an integer
+    $id = (int) $_GET['id'];  // Make sure it's an integer
 
     // Display confirmation message using JavaScript
     echo "<script>
         var confirmation = confirm('Are you sure you want to delete this record? This action cannot be undone.');
         if (confirmation) {
-            // Begin a transaction to ensure data consistency
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = window.location.href;  // This will keep the action to the current page
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'id';
-            input.value = '$id';
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
+            // If confirmed, submit the form
+            window.location.href = 'deletemember.php?id=" . $id . "&confirm=true';
         } else {
-            window.location.href = 'all_member.php'; // Redirect back if canceled
+            // If canceled, redirect to the all_member page
+            window.location.href = 'all_member.php';
         }
     </script>";
-} else {
-    echo "Invalid request.";
+    exit(); // Exit script to prevent deletion until confirmed
 }
 
-// If the confirmation is passed, delete the record
-if (isset($_POST['id'])) {
+// If the user confirmed the deletion (via GET parameter `confirm`)
+if (isset($_GET['confirm']) && $_GET['confirm'] == 'true' && isset($_GET['id'])) {
+    $id = (int) $_GET['id'];  // Make sure it's an integer
+
     // Begin a transaction to ensure data consistency
     $conn->begin_transaction();
 
