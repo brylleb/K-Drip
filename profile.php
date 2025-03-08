@@ -1,9 +1,18 @@
 <?php
-session_start();
+
 // Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    ini_set('session.cookie_secure', 0); // Allow HTTP sessions on localhost
+} else {
+    ini_set('session.cookie_secure', 1); // Enforce HTTPS on production
+}
+
+// Always enforce these security settings
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
 ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+
+session_start();
 
 // Set the session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeout_duration = 900;
@@ -32,11 +41,18 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to login page if not logged in
     exit();
 }
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+// Load environment variables
+$config = parse_ini_file(__DIR__ . '/.env');
+
+// Check if environment variables are loaded
+if (!$config) {
+    die("Error: Could not load configuration file.");
+}
+$servername = $config['DB_SERVER'];
+$username = $config['DB_USERNAME'];
+$password = $config['DB_PASSWORD'];
+$dbname = $config['DB_NAME'];
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -110,12 +126,17 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'appointment-tab';
 </head>
 <body>
     <!-- Display success or error message -->
-    <?php if (isset($_SESSION['message'])): ?>
-        <script>
-            alert('<?php echo addslashes($_SESSION['message']); ?>');
-        </script>
-        <?php unset($_SESSION['message']); // Clear the message after displaying ?>
-    <?php endif; ?>
+    <?php
+if (isset($_GET['message'])) {
+    $message = htmlspecialchars($_GET['message'], ENT_QUOTES, 'UTF-8');
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            alert('$message');
+            window.history.replaceState({}, document.title, window.location.pathname + window.location.search.split('&message=')[0]);
+        });
+    </script>";
+}
+?>
 
     <div class="main-container">
         <!-- Sidebar -->
@@ -177,21 +198,27 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'appointment-tab';
                     </select>
 
                     <label for="service">Service:</label>
-                    <select id="service" name="service" required>
+                    <select id="service" name="service[]" multiple required>
                         <option value="Regular Push">Regular Push</option>
                         <option value="Special Push">Special Push</option>
                         <option value="Supreme Push">Supreme Push</option>
-                        <option value="Regular Drip">Regular Drip</option>
-                        <option value="Special Drip">Special Drip</option>
-                        <option value="Supreme Drip">Supreme Drip</option>
-                        <option value="Slim Drip">Slim Drip</option>
+                        <option value="Regular Drip">Glow Drip</option>
+                        <option value="Special Drip">Miracle Drip</option>
+                        <option value="Supreme Drip">Immune Booster Drip</option>
+                        <option value="Slim Drip">Metabo Drip</option>
+                        <option value="Slim Drip">Cindyrella Drip</option>
                         <option value="Regular Push Package">Regular Push Package</option>
-                        <option value="Regular Drip Package">Regular Drip Package</option>
-                        <option value="Supreme Drip Package">Supreme Drip Package</option>
-                        <option value="Slim Drip Package">Slim Drip Package</option>
+                        <option value="Regular Drip Package">Glow Drip Package</option>
+                        <option value="Slim Drip Package">Immune Booster Drip Package</option>
+                        <option value="Slim Drip">Metabo Drip Package</option>
+                        <option value="Slim Drip">Cindyrella Drip Package(5+1)</option>
+                        <option value="Slim Drip">Cindyrella Drip Package(10+2)</option>
+                        <option value="Slim Drip">RF & Cavitation</option>
+                        <option value="Slim Drip">V-Line Double Chin</option>
+                        <option value="Slim Drip">Love Handles/Back</option>
+                        <option value="Slim Drip">Arms/Tummy/Thighs</option>
                         <option value="Injection Only">Injection Only</option>
                     </select>
-
                     <label for="note">Note:</label>
                     <input type="text" id="note" name="note">
 
@@ -227,7 +254,7 @@ $active_tab = isset($_GET['tab']) ? $_GET['tab'] : 'appointment-tab';
             <th>Action</th>
         </tr>
         <?php
-        // Display session history
+
 // Display session history
 while ($row = $history_result->fetch_assoc()) {
     $time = date("h:i A", strtotime($row['time']));  // Convert to 12-hour format with AM/PM
@@ -236,16 +263,16 @@ while ($row = $history_result->fetch_assoc()) {
             <td>" . htmlspecialchars($row['date']) . "</td>
             <td>" . $time . "</td>
             <td>" . htmlspecialchars($row['price']) . "</td>
-            <td>" . htmlspecialchars($row['service']) . "</td>
+            <td>" . nl2br(htmlspecialchars(str_replace(",", "\n\n", $row['service']))) . "</td>
             <td>" . htmlspecialchars($row['note']) . "</td>
             <td>" . htmlspecialchars($row['mode_of_payment']) . "</td>
             <td>" . htmlspecialchars($row['status']) . "</td>
             <td class='action-buttons'>
-                <form style='display:inline;' action='editsession.php' method='POST'>
+                <form style='display:inline;' action='editrecord.php' method='POST'>
                     <input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>
                     <button class='edit-btn' type='submit'>Edit</button>
                 </form>
-                <form style='display:inline;' action='deletesession.php' method='POST'>
+                <form style='display:inline;' action='deleterecord.php' method='POST'>
                     <input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>
                     <button class='delete-btn' type='submit' onclick='return confirm(\"Are you sure you want to delete this record?\");'>Delete</button>
                 </form>
@@ -284,6 +311,11 @@ while ($row = $history_result->fetch_assoc()) {
                 window.history.pushState({}, '', '?id=<?php echo $user_id; ?>&tab=' + tab.getAttribute('data-target'));
             });
         });
+
+        document.getElementById('service').addEventListener('change', function() {
+        let selectedOptions = Array.from(this.selectedOptions).map(option => option.value);
+        console.log(selectedOptions);
+    });
     </script>
 </body>
 </html>

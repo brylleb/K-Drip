@@ -1,9 +1,18 @@
 <?php
-        session_start();
+
 // Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    ini_set('session.cookie_secure', 0); // Allow HTTP sessions on localhost
+} else {
+    ini_set('session.cookie_secure', 1); // Enforce HTTPS on production
+}
+
+// Always enforce these security settings
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
 ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+
+session_start();
 
 // Set the session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeout_duration = 900;

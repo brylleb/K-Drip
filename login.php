@@ -1,9 +1,29 @@
 <?php
-session_start();
 // Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    ini_set('session.cookie_secure', 0); // Allow HTTP sessions on localhost
+} else {
+    ini_set('session.cookie_secure', 1); // Enforce HTTPS on production
+}
+
+// Always enforce these security settings
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
 ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+session_start();
+
+// Load environment variables
+$config = parse_ini_file(__DIR__ . '/.env');
+
+// Check if environment variables are loaded
+if (!$config) {
+    die("Error: Could not load configuration file.");
+}
+$servername = $config['DB_SERVER'];
+$username = $config['DB_USERNAME'];
+$password = $config['DB_PASSWORD'];
+$dbname = $config['DB_NAME'];
+
 
 // Set the session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeout_duration = 900;
@@ -27,11 +47,7 @@ if (!isset($_SESSION['regenerated'])) {
     session_regenerate_id(true); // Regenerate session ID
     $_SESSION['regenerated'] = true; // Mark as regenerated
 }
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+
 
 // Initialize variables
 $login_error = "";

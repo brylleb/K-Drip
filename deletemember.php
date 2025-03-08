@@ -1,9 +1,15 @@
 <?php
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+// Load environment variables
+$config = parse_ini_file(__DIR__ . '/.env');
+
+// Check if environment variables are loaded
+if (!$config) {
+    die("Error: Could not load configuration file.");
+    }
+$servername = $config['DB_SERVER'];
+$username = $config['DB_USERNAME'];
+$password = $config['DB_PASSWORD'];
+$dbname = $config['DB_NAME'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

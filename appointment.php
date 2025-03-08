@@ -1,9 +1,17 @@
 <?php
-session_start();
+
 // Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    ini_set('session.cookie_secure', 0); // Allow HTTP sessions on localhost
+} else {
+    ini_set('session.cookie_secure', 1); // Enforce HTTPS on production
+}
+
+// Always enforce these security settings
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
 ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+session_start();
 
 // Set the session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeout_duration = 900;
@@ -33,11 +41,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+// Load environment variables
+$config = parse_ini_file(__DIR__ . '/.env');
+
+// Check if environment variables are loaded
+if (!$config) {
+    die("Error: Could not load configuration file.");
+}
+$servername = $config['DB_SERVER'];
+$username = $config['DB_USERNAME'];
+$password = $config['DB_PASSWORD'];
+$dbname = $config['DB_NAME'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -47,35 +61,34 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form data
-    $user_id = $_POST['user_id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = intval($_POST['user_id']);
     $date = $_POST['date'];
     $time = $_POST['time'];
     $price = $_POST['price'];
     $status = $_POST['status'];
-    $service = $_POST['service'];
     $note = $_POST['note'];
     $payment_mode = $_POST['payment_mode'];
-
-    // Insert data into transaction table
-    $sql = "INSERT INTO member_profile (date, time, price, status, service, note, mode_of_payment, reg_member_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssdssssi", $date, $time, $price, $status, $service, $note, $payment_mode, $user_id);
     
+    // Convert selected services array to a comma-separated string
+    $service = isset($_POST['service']) ? implode(", ", $_POST['service']) : '';
+
+    $sql = "INSERT INTO member_profile (reg_member_id, date, time, price, service, note, mode_of_payment, status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("isssssss", $user_id, $date, $time, $price, $service, $note, $payment_mode, $status);
+
     if ($stmt->execute()) {
-        $_SESSION['message'] = "Appointment successfully recorded!";
+        header("Location: profile.php?id=$user_id&tab=history-tab&message=Appointment+added+successfully");
+        exit();
     } else {
-        $_SESSION['message'] = "Error: " . $stmt->error;
+        echo "Error: " . $stmt->error;
     }
-
+    
     $stmt->close();
+    $conn->close();
 }
-
-// Close connection
-$conn->close();
 
 // Redirect back to the user profile page to display the history tab with updated data
 header("Location: profile.php?id=" . $user_id);

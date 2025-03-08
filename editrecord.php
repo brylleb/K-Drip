@@ -1,9 +1,18 @@
 <?php
-session_start();
+
 // Secure session settings
-ini_set('session.cookie_secure', 1); // Ensure cookies are sent over HTTPS
+if (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on') {
+    ini_set('session.cookie_secure', 0); // Allow HTTP sessions on localhost
+} else {
+    ini_set('session.cookie_secure', 1); // Enforce HTTPS on production
+}
+
+// Always enforce these security settings
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookies
 ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks
+
+
+session_start();
 
 // Set the session timeout duration (e.g., 15 minutes = 900 seconds)
 $timeout_duration = 900;
@@ -32,11 +41,18 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirect to login page if not logged in
     exit();
 }
-// Database connection settings
-$servername = "sql205.infinityfree.com";
-$username = "if0_38112458";
-$password = "8YH7MFDryvDx8";
-$dbname = "if0_38112458_kdrip_database";
+
+// Load environment variables
+$config = parse_ini_file(__DIR__ . '/.env');
+
+// Check if environment variables are loaded
+if (!$config) {
+    die("Error: Could not load configuration file.");
+    }
+$servername = $config['DB_SERVER'];
+$username = $config['DB_USERNAME'];
+$password = $config['DB_PASSWORD'];
+$dbname = $config['DB_NAME'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -67,14 +83,33 @@ if ($result->num_rows === 0) {
 $row = $result->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
-    // Process form submission for updates
+    // Retrieve form inputs
+    $row_id = intval($_POST['id']); // Get record ID from the form
     $date = $_POST['date'];
     $time = $_POST['time'];
     $price = $_POST['price'];
-    $service = $_POST['service'];
     $note = $_POST['note'];
     $mode_of_payment = $_POST['mode_of_payment'];
     $status = $_POST['status'];
+    
+    // Convert service array to a CSV string (if multiple services are selected)
+    $service = isset($_POST['service']) ? implode(", ", $_POST['service']) : '';
+
+    // Fetch reg_member_id for redirection
+    $member_query = "SELECT reg_member_id FROM member_profile WHERE id = ?";
+    $member_stmt = $conn->prepare($member_query);
+    $member_stmt->bind_param("i", $row_id);
+    $member_stmt->execute();
+    $member_result = $member_stmt->get_result();
+
+    if ($member_result->num_rows > 0) {
+        $member_row = $member_result->fetch_assoc();
+        $reg_member_id = $member_row['reg_member_id'];
+    } else {
+        $_SESSION['message'] = "Error: Record not found.";
+        header("Location: profile.php?id=$reg_member_id&tab=history-tab");
+        exit();
+    }
 
     // Update query
     $update_sql = "UPDATE member_profile 
@@ -85,15 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
 
     if ($update_stmt->execute()) {
         $_SESSION['message'] = "Record updated successfully.";
-        header("Location: profile.php?id=" . $row['reg_member_id'] . "&tab=history-tab");
-        exit();
     } else {
-        $error = "Error updating record: " . $conn->error;
+        $_SESSION['message'] = "Error updating record: " . $conn->error;
     }
+
+    // Redirect back to the profile page
+    header("Location: profile.php?id=$reg_member_id&tab=history-tab");
+    exit();
 }
 
 // Close connection
-$stmt->close();
 $conn->close();
 ?>
 
@@ -111,7 +147,7 @@ $conn->close();
         <?php if (isset($error)): ?>
             <p style="color: red; text-align: center;"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        <form method="POST" action="editsession.php">
+        <form method="POST" action="editrecord.php">
             <input type="hidden" name="id" value="<?php echo htmlspecialchars($row['id']); ?>">
 
             <div class="form-group">
@@ -130,21 +166,28 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="service">Service:</label>
-                <select id="service" name="service" required>
+            <label for="service">Service:</label>
+                    <select id="service" name="service[]" multiple required>
                         <option value="Regular Push">Regular Push</option>
                         <option value="Special Push">Special Push</option>
                         <option value="Supreme Push">Supreme Push</option>
-                        <option value="Regular Drip">Regular Drip</option>
-                        <option value="Special Drip">Special Drip</option>
-                        <option value="Supreme Drip">Supreme Drip</option>
-                        <option value="Slim Drip">Slim Drip</option>
+                        <option value="Regular Drip">Glow Drip</option>
+                        <option value="Special Drip">Miracle Drip</option>
+                        <option value="Supreme Drip">Immune Booster Drip</option>
+                        <option value="Slim Drip">Metabo Drip</option>
+                        <option value="Slim Drip">Cindyrella Drip</option>
                         <option value="Regular Push Package">Regular Push Package</option>
-                        <option value="Regular Drip Package">Regular Drip Package</option>
-                        <option value="Supreme Drip Package">Supreme Drip Package</option>
-                        <option value="Slim Drip Package">Slim Drip Package</option>
+                        <option value="Regular Drip Package">Glow Drip Package</option>
+                        <option value="Slim Drip Package">Immune Booster Drip Package</option>
+                        <option value="Slim Drip">Metabo Drip Package</option>
+                        <option value="Slim Drip">Cindyrella Drip Package(5+1)</option>
+                        <option value="Slim Drip">Cindyrella Drip Package(10+2)</option>
+                        <option value="Slim Drip">RF & Cavitation</option>
+                        <option value="Slim Drip">V-Line Double Chin</option>
+                        <option value="Slim Drip">Love Handles/Back</option>
+                        <option value="Slim Drip">Arms/Tummy/Thighs</option>
                         <option value="Injection Only">Injection Only</option>
-                </select>
+                    </select>
             </div>
 
             <div class="form-group">
