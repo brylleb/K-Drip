@@ -199,24 +199,24 @@ if (isset($_GET['message'])) {
 
                     <label for="service">Service:</label>
                     <select id="service" name="service[]" multiple required>
-                        <option value="Regular Push">Regular Push</option>
+                    <option value="Regular Push">Regular Push</option>
                         <option value="Special Push">Special Push</option>
                         <option value="Supreme Push">Supreme Push</option>
-                        <option value="Regular Drip">Glow Drip</option>
-                        <option value="Special Drip">Miracle Drip</option>
-                        <option value="Supreme Drip">Immune Booster Drip</option>
-                        <option value="Slim Drip">Metabo Drip</option>
-                        <option value="Slim Drip">Cindyrella Drip</option>
+                        <option value="Glow Drip">Glow Drip</option>
+                        <option value="Miracle Drip">Miracle Drip</option>
+                        <option value="Immune Booster Drip">Immune Booster Drip</option>
+                        <option value="Metabo Drip">Metabo Drip</option>
+                        <option value="Cindyrella Drip">Cindyrella Drip</option>
                         <option value="Regular Push Package">Regular Push Package</option>
-                        <option value="Regular Drip Package">Glow Drip Package</option>
-                        <option value="Slim Drip Package">Immune Booster Drip Package</option>
-                        <option value="Slim Drip">Metabo Drip Package</option>
-                        <option value="Slim Drip">Cindyrella Drip Package(5+1)</option>
-                        <option value="Slim Drip">Cindyrella Drip Package(10+2)</option>
-                        <option value="Slim Drip">RF & Cavitation</option>
-                        <option value="Slim Drip">V-Line Double Chin</option>
-                        <option value="Slim Drip">Love Handles/Back</option>
-                        <option value="Slim Drip">Arms/Tummy/Thighs</option>
+                        <option value="Glow Drip Package">Glow Drip Package</option>
+                        <option value="Immune Booster Drip Package">Immune Booster Drip Package</option>
+                        <option value="Metabo Drip Package">Metabo Drip Package</option>
+                        <option value="Cindyrella Drip Package(5+1)">Cindyrella Drip Package(5+1)</option>
+                        <option value="Cindyrella Drip Package(10+2)">Cindyrella Drip Package(10+2)</option>
+                        <option value="RF & Cavitation">RF & Cavitation</option>
+                        <option value="V-Line Double Chin">V-Line Double Chin</option>
+                        <option value="Love Handles/Back">Love Handles/Back</option>
+                        <option value="Arms/Tummy/Thighs">Arms/Tummy/Thighs</option>
                         <option value="Injection Only">Injection Only</option>
                     </select>
                     <label for="note">Note:</label>
