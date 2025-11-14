@@ -231,7 +231,7 @@
                         echo "<td>" . htmlspecialchars($row['age']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['address']) . "</td>";
                         echo "<td class='action-buttons'>";
-                        echo "<form style='display:inline;' action='edit.php' method='POST'>";
+                        echo "<form style='display:inline;' action='editrecord.php' method='POST'>";
                         echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";
                         echo "<button class='edit-btn' type='submit'>Edit</button>";
                         echo "</form>";
